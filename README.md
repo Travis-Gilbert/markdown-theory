@@ -1,21 +1,22 @@
----
 # markdown-theory
 
-Computational Beauty. Markdown theory is designed to make your files look like a personal website or blog rather than a pile of files supports markdown-to-HTML markdown-to-react
----
+**Computational beauty.** markdown-theory makes your files read like a personal
+website or blog rather than a pile of files: markdown to HTML, markdown to React,
+with output that is good by construction. MIT licensed. Published as
+[`@travisgilbert/markdown-theory`](https://www.npmjs.com/package/@travisgilbert/markdown-theory).
 
-A markdown renderer whose default output looks like a **publication, not a
-folder of files** because beauty is *computed*, not themed. MIT licensed.
-Published as [`@travisgilbert/markdown-theory`](https://www.npmjs.com/package/@travisgilbert/markdown-theory).
+A markdown renderer whose default output looks like a **publication, not a folder
+of files**, because beauty is *computed*, not themed. Point it at a markdown
+string, a directory, or a bundle and it renders a page that is good by
+construction, including content nobody stopped to style. It is a clean-room
+alternative to Quarkdown (GPL-3.0) and CodiMD (AGPL-3.0): those are visual
+references only, no code, no CSS, no ported themes.
 
-Point it at a markdown string, a directory, or a bundle and it renders a page
-that is good by construction, including content nobody stopped to style
-
-## The three
+## The three claims
 
 1. **Beauty is computed, not themed.** A proportion engine derives every token
-   — type ramp, leading, rhythm, page shape, an OKLCH palette solved for WCAG AA
-   — from ~7 axes. Components contain no literal values. Change one axis and the
+   (type ramp, leading, rhythm, page shape, an OKLCH palette solved for WCAG AA)
+   from ~7 axes. Components contain no literal values. Change one axis and the
    whole sheet re-derives.
 2. **Documents have types, and types have recipes.** Frontmatter selects a
    layout recipe; an article, a note, and a reference page share tokens but not
@@ -29,12 +30,12 @@ Subpath exports of `@travisgilbert/markdown-theory`:
 
 | Export | What it is | Status |
 |---|---|---|
-| `@travisgilbert/markdown-theory/tokens` | The proportion engine. Framework-free; emits CSS custom properties. | **G1** |
-| `@travisgilbert/markdown-theory/css` | The static stylesheet consuming those properties. Usable without React. | **G2** |
-| `@travisgilbert/markdown-theory/react` | Components. Server-safe; interactive nodes are islands. | **G2** |
-| `@travisgilbert/markdown-theory/templates` | Type recipes and their registry (article, note, reference, log). | **G3** |
-| `@travisgilbert/markdown-theory/shelf` | Collection views plus the adapter interface (fs, okf, theorem). | **G4** |
-| `@travisgilbert/markdown-theory/mdx` | Optional, trusted-authors-only MDX entry. | **G5** |
+| `@travisgilbert/markdown-theory/tokens` | The proportion engine. Framework-free; emits CSS custom properties. | G1 |
+| `@travisgilbert/markdown-theory/css` | The static stylesheet consuming those properties. Usable without React. | G2 |
+| `@travisgilbert/markdown-theory/react` | Components. Server-safe; interactive nodes are islands. | G2 |
+| `@travisgilbert/markdown-theory/templates` | Type recipes and their registry (article, note, reference, log). | G3 |
+| `@travisgilbert/markdown-theory/shelf` | Collection views plus the adapter interface (fs, okf, theorem). | G4 |
+| `@travisgilbert/markdown-theory/mdx` | Optional, trusted-authors-only MDX entry. | G5 |
 
 Parsing lives in the sibling [`@travisgilbert/markdown-spine`](https://www.npmjs.com/package/@travisgilbert/markdown-spine)
 package (MIT). Theorem is a downstream consumer, not the other way around.
@@ -86,7 +87,7 @@ pnpm demo:tokens   # emits packages/galley/dist/{tokens.css, demo.html}
 
 ## Provenance and naming
 
-MIT. `markdown-theory` was built under the working codename **galley** (the tray
-that holds set type before imposition — same set type, many pages); the internal
+MIT. markdown-theory was built under the working codename **galley** (the tray
+that holds set type before imposition: same set type, many pages); the internal
 package directory keeps that name. Visual references (Quarkdown, CodiMD) are named
 for provenance only; no code derives from them.
