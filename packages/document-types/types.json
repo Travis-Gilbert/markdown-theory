@@ -1,0 +1,475 @@
+{
+  "version": "0.1",
+  "descriptors": [
+    {
+      "id": "article",
+      "family": "prose",
+      "epistemic": "claim_bearing",
+      "okf_type": "Article",
+      "fields": [
+        { "key": "byline", "required": false, "shape": "string" },
+        { "key": "publication", "required": false, "shape": "string" },
+        { "key": "source_url", "required": false, "shape": "string" }
+      ],
+      "headings": [],
+      "recipe": { "base": "prose", "deltas": {} },
+      "margin": ["citations", "claims", "suggestions"],
+      "affordances": ["extract_claims", "link_entities"],
+      "infer": { "signals": [] }
+    },
+    {
+      "id": "paper",
+      "family": "prose",
+      "epistemic": "claim_bearing",
+      "okf_type": "Research Paper",
+      "fields": [
+        { "key": "authors", "required": false, "shape": "string[]" },
+        { "key": "venue", "required": false, "shape": "string" },
+        { "key": "year", "required": false, "shape": "number" },
+        { "key": "doi", "required": false, "shape": "string" }
+      ],
+      "headings": ["Abstract", "Method", "Results", "Citations"],
+      "recipe": { "base": "prose", "deltas": { "toc": true } },
+      "margin": ["citations", "claims", "objections"],
+      "affordances": ["extract_claims", "link_entities"],
+      "infer": { "signals": ["abstract_heading", "numbered_citations"] }
+    },
+    {
+      "id": "concept",
+      "family": "prose",
+      "epistemic": "claim_bearing",
+      "okf_type": "Concept",
+      "fields": [
+        { "key": "maturity", "required": false, "shape": "enum:seedling|working|settled" },
+        { "key": "answers_question", "required": false, "shape": "ref" }
+      ],
+      "headings": [],
+      "recipe": { "base": "prose", "deltas": {} },
+      "margin": ["objections", "analogies", "questions", "suggestions"],
+      "affordances": ["check_contradictions", "find_analogies"],
+      "infer": { "signals": [] }
+    },
+    {
+      "id": "argument",
+      "family": "prose",
+      "epistemic": "claim_bearing",
+      "okf_type": "Argument",
+      "fields": [
+        { "key": "thesis", "required": false, "shape": "string" },
+        { "key": "stance", "required": false, "shape": "string" }
+      ],
+      "headings": ["Position", "Supports", "Objections"],
+      "recipe": { "base": "prose", "deltas": {} },
+      "margin": ["claims", "objections", "citations"],
+      "affordances": ["extract_claims", "check_contradictions"],
+      "infer": { "signals": ["position_supports_objections_headings"] }
+    },
+    {
+      "id": "question",
+      "family": "prose",
+      "epistemic": "claim_bearing",
+      "okf_type": "Question",
+      "fields": [
+        { "key": "status", "required": false, "shape": "enum:open|answered" },
+        { "key": "resolved_by", "required": false, "shape": "ref" }
+      ],
+      "headings": [],
+      "recipe": { "base": "prose", "deltas": {} },
+      "margin": ["suggestions", "claims", "analogies"],
+      "affordances": ["answer_question"],
+      "infer": { "signals": ["interrogative_title"] }
+    },
+    {
+      "id": "review",
+      "family": "prose",
+      "epistemic": "claim_bearing",
+      "okf_type": "Review",
+      "fields": [
+        { "key": "subject_ref", "required": false, "shape": "ref" },
+        { "key": "verdict", "required": false, "shape": "string" },
+        { "key": "rating", "required": false, "shape": "number" }
+      ],
+      "headings": [],
+      "recipe": { "base": "prose", "deltas": {} },
+      "margin": ["citations", "relationships"],
+      "affordances": ["link_entities"],
+      "infer": { "signals": [] }
+    },
+    {
+      "id": "profile",
+      "family": "reference",
+      "epistemic": "reference",
+      "okf_type": "Profile",
+      "fields": [
+        { "key": "subject_kind", "required": false, "shape": "enum:person|org|place|project|work" },
+        { "key": "aliases", "required": false, "shape": "string[]" }
+      ],
+      "headings": [],
+      "recipe": { "base": "reference", "deltas": {} },
+      "margin": ["relationships", "usages", "history"],
+      "affordances": ["link_entities", "check_freshness"],
+      "infer": { "signals": [] }
+    },
+    {
+      "id": "reference",
+      "family": "reference",
+      "epistemic": "reference",
+      "okf_type": "Reference",
+      "fields": [
+        { "key": "subject_kind", "required": false, "shape": "enum:api|dataset|table|tool" },
+        { "key": "resource", "required": false, "shape": "string" }
+      ],
+      "headings": ["Schema", "Examples"],
+      "recipe": { "base": "reference", "deltas": { "toc": true } },
+      "margin": ["freshness", "usages"],
+      "affordances": ["check_freshness"],
+      "infer": { "signals": ["schema_heading"] }
+    },
+    {
+      "id": "glossary",
+      "family": "reference",
+      "epistemic": "reference",
+      "okf_type": "Definition",
+      "fields": [
+        { "key": "term", "required": false, "shape": "string" },
+        { "key": "domain", "required": false, "shape": "string" }
+      ],
+      "headings": [],
+      "recipe": { "base": "reference", "deltas": {} },
+      "margin": ["usages", "suggestions"],
+      "affordances": ["link_entities"],
+      "infer": { "signals": [] }
+    },
+    {
+      "id": "comparison",
+      "family": "reference",
+      "epistemic": "reference",
+      "okf_type": "Comparison",
+      "fields": [
+        { "key": "subjects", "required": false, "shape": "string[]" },
+        { "key": "criteria", "required": false, "shape": "string[]" }
+      ],
+      "headings": [],
+      "recipe": { "base": "reference", "deltas": {} },
+      "margin": ["citations", "freshness"],
+      "affordances": ["compare_criteria"],
+      "infer": { "signals": [] }
+    },
+    {
+      "id": "recipe",
+      "family": "procedure",
+      "epistemic": "procedural",
+      "okf_type": "Recipe",
+      "fields": [
+        { "key": "servings", "required": false, "shape": "number" },
+        { "key": "prep_time", "required": false, "shape": "string" },
+        { "key": "cook_time", "required": false, "shape": "string" }
+      ],
+      "headings": ["Ingredients", "Method"],
+      "recipe": { "base": "procedure", "deltas": { "numbered": true } },
+      "margin": ["timers", "quantities"],
+      "affordances": ["scale_quantities"],
+      "infer": { "signals": ["ingredient_list", "numbered_steps"] }
+    },
+    {
+      "id": "runbook",
+      "family": "procedure",
+      "epistemic": "procedural",
+      "okf_type": "Playbook",
+      "fields": [
+        { "key": "trigger", "required": false, "shape": "string" },
+        { "key": "severity", "required": false, "shape": "string" },
+        { "key": "owner", "required": false, "shape": "string" }
+      ],
+      "headings": ["Trigger", "Steps", "Rollback"],
+      "recipe": { "base": "procedure", "deltas": { "numbered": true } },
+      "margin": ["actions", "freshness", "history"],
+      "affordances": ["execute_steps"],
+      "infer": { "signals": ["trigger_steps_rollback_headings"] }
+    },
+    {
+      "id": "tutorial",
+      "family": "procedure",
+      "epistemic": "procedural",
+      "okf_type": "Tutorial",
+      "fields": [
+        { "key": "prerequisites", "required": false, "shape": "string[]" },
+        { "key": "level", "required": false, "shape": "string" }
+      ],
+      "headings": ["Prerequisites", "Steps"],
+      "recipe": { "base": "procedure", "deltas": { "numbered": true } },
+      "margin": ["timers", "suggestions", "questions"],
+      "affordances": [],
+      "infer": { "signals": ["prerequisites_heading"] }
+    },
+    {
+      "id": "readme",
+      "family": "procedure",
+      "epistemic": "procedural",
+      "okf_type": "Readme",
+      "fields": [
+        { "key": "repo", "required": false, "shape": "string" },
+        { "key": "package_manager", "required": false, "shape": "string" }
+      ],
+      "headings": ["Installation", "Usage"],
+      "recipe": { "base": "procedure", "deltas": { "numbered": true } },
+      "margin": ["freshness", "relationships"],
+      "affordances": ["check_freshness"],
+      "infer": { "signals": ["badges", "installation_heading"] }
+    },
+    {
+      "id": "checklist",
+      "family": "procedure",
+      "epistemic": "procedural",
+      "okf_type": "Checklist",
+      "fields": [
+        { "key": "template_of", "required": false, "shape": "ref" }
+      ],
+      "headings": [],
+      "recipe": { "base": "procedure", "deltas": {} },
+      "margin": ["actions"],
+      "affordances": ["instantiate_checklist"],
+      "infer": { "signals": ["task_list"] }
+    },
+    {
+      "id": "note",
+      "family": "record",
+      "epistemic": "record",
+      "okf_type": "Note",
+      "fields": [],
+      "headings": [],
+      "recipe": { "base": "record", "deltas": {} },
+      "margin": ["suggestions"],
+      "affordances": [],
+      "infer": { "signals": [] }
+    },
+    {
+      "id": "log",
+      "family": "record",
+      "epistemic": "record",
+      "okf_type": "Log",
+      "fields": [
+        { "key": "scope", "required": false, "shape": "string" }
+      ],
+      "headings": [],
+      "recipe": { "base": "record", "deltas": {} },
+      "margin": ["history"],
+      "affordances": [],
+      "infer": { "signals": ["dated_entries"] }
+    },
+    {
+      "id": "meeting",
+      "family": "record",
+      "epistemic": "record",
+      "okf_type": "Meeting Notes",
+      "fields": [
+        { "key": "attendees", "required": false, "shape": "string[]" },
+        { "key": "date", "required": false, "shape": "date" },
+        { "key": "project", "required": false, "shape": "string" }
+      ],
+      "headings": ["Decisions", "Actions"],
+      "recipe": { "base": "record", "deltas": {} },
+      "margin": ["actions", "relationships"],
+      "affordances": ["extract_actions"],
+      "infer": { "signals": ["attendees_field", "decisions_actions_headings"] }
+    },
+    {
+      "id": "decision",
+      "family": "record",
+      "epistemic": "record",
+      "okf_type": "Decision Record",
+      "fields": [
+        { "key": "status", "required": false, "shape": "string" },
+        { "key": "context_ref", "required": false, "shape": "ref" },
+        { "key": "supersedes", "required": false, "shape": "ref" }
+      ],
+      "headings": ["Context", "Options", "Decision", "Consequences"],
+      "recipe": { "base": "record", "deltas": { "toc": true } },
+      "margin": ["history", "objections", "relationships"],
+      "affordances": ["check_contradictions"],
+      "infer": { "signals": ["context_decision_consequences_headings"] }
+    },
+    {
+      "id": "postmortem",
+      "family": "record",
+      "epistemic": "record",
+      "okf_type": "Postmortem",
+      "fields": [],
+      "headings": ["Timeline", "Root Cause", "Actions"],
+      "recipe": { "base": "record", "deltas": {} },
+      "margin": ["actions", "history", "citations"],
+      "affordances": ["extract_actions"],
+      "infer": { "signals": ["timeline_root_cause_headings"] }
+    },
+    {
+      "id": "solution",
+      "family": "record",
+      "epistemic": "record",
+      "okf_type": "Solution",
+      "fields": [],
+      "headings": ["Problem", "Solution"],
+      "recipe": { "base": "record", "deltas": {} },
+      "margin": ["suggestions", "history"],
+      "affordances": ["extract_claims"],
+      "infer": { "signals": ["problem_solution_headings"] }
+    },
+    {
+      "id": "transcript",
+      "family": "record",
+      "epistemic": "record",
+      "okf_type": "Transcript",
+      "fields": [
+        { "key": "speakers", "required": false, "shape": "string[]" },
+        { "key": "source_url", "required": false, "shape": "string" },
+        { "key": "duration", "required": false, "shape": "string" }
+      ],
+      "headings": ["speaker turns"],
+      "recipe": { "base": "record", "deltas": {} },
+      "margin": ["claims", "actions", "relationships"],
+      "affordances": ["extract_claims", "extract_actions"],
+      "infer": { "signals": ["speaker_turn_pattern"] }
+    },
+    {
+      "id": "clipping",
+      "family": "record",
+      "epistemic": "record",
+      "okf_type": "Web Clipping",
+      "fields": [
+        { "key": "source_url", "required": true, "shape": "string" },
+        { "key": "captured_at", "required": false, "shape": "date" }
+      ],
+      "headings": [],
+      "recipe": { "base": "record", "deltas": {} },
+      "margin": ["citations", "relationships", "suggestions"],
+      "affordances": ["extract_claims", "link_entities"],
+      "infer": { "signals": ["source_url_field"] }
+    },
+    {
+      "id": "correspondence",
+      "family": "record",
+      "epistemic": "record",
+      "okf_type": "Correspondence",
+      "fields": [
+        { "key": "thread_id", "required": false, "shape": "string" },
+        { "key": "from", "required": false, "shape": "string" },
+        { "key": "to", "required": false, "shape": "string[]" }
+      ],
+      "headings": [],
+      "recipe": { "base": "record", "deltas": {} },
+      "margin": ["actions", "relationships", "history"],
+      "affordances": ["extract_actions"],
+      "infer": { "signals": ["from_to_fields"] }
+    },
+    {
+      "id": "handoff",
+      "family": "record",
+      "epistemic": "record",
+      "okf_type": "Handoff",
+      "fields": [],
+      "headings": [],
+      "recipe": { "base": "record", "deltas": {} },
+      "margin": ["actions", "history"],
+      "affordances": [],
+      "infer": { "signals": [] }
+    },
+    {
+      "id": "spec",
+      "family": "working",
+      "epistemic": "procedural",
+      "okf_type": "Specification",
+      "fields": [
+        { "key": "register", "required": false, "shape": "enum:north_star|execution" },
+        { "key": "status", "required": false, "shape": "string" }
+      ],
+      "headings": ["Intent", "Deliverables", "Acceptance"],
+      "recipe": { "base": "working", "deltas": { "toc": true, "numbered": true } },
+      "margin": ["actions", "history", "relationships"],
+      "affordances": ["dispatch_jobs", "extract_actions"],
+      "infer": { "signals": ["deliverables_acceptance_headings"] }
+    },
+    {
+      "id": "outline",
+      "family": "working",
+      "epistemic": "generated",
+      "okf_type": "Outline",
+      "fields": [
+        { "key": "expands_to", "required": false, "shape": "ref" }
+      ],
+      "headings": [],
+      "recipe": { "base": "working", "deltas": {} },
+      "margin": ["suggestions", "questions"],
+      "affordances": ["expand_outline"],
+      "infer": { "signals": [] }
+    },
+    {
+      "id": "script",
+      "family": "working",
+      "epistemic": "generated",
+      "okf_type": "Video Script",
+      "fields": [
+        { "key": "target_length", "required": false, "shape": "string" },
+        { "key": "video_ref", "required": false, "shape": "ref" }
+      ],
+      "headings": ["scene blocks", "VO markers"],
+      "recipe": { "base": "working", "deltas": {} },
+      "margin": ["timers", "questions", "suggestions"],
+      "affordances": [],
+      "infer": { "signals": [] }
+    },
+    {
+      "id": "index",
+      "family": "structural",
+      "epistemic": "generated",
+      "okf_type": "Index",
+      "fields": [],
+      "headings": ["sections of links"],
+      "recipe": { "base": "structural", "deltas": {} },
+      "margin": [],
+      "affordances": [],
+      "infer": { "signals": [] }
+    },
+    {
+      "id": "timeline",
+      "family": "structural",
+      "epistemic": "record",
+      "okf_type": "Timeline",
+      "fields": [
+        { "key": "scope", "required": false, "shape": "string" },
+        { "key": "span", "required": false, "shape": "string" }
+      ],
+      "headings": ["dated events"],
+      "recipe": { "base": "structural", "deltas": {} },
+      "margin": ["relationships", "citations"],
+      "affordances": [],
+      "infer": { "signals": [] }
+    },
+    {
+      "id": "reading",
+      "family": "structural",
+      "epistemic": "generated",
+      "okf_type": "Reading List",
+      "fields": [
+        { "key": "items", "required": false, "shape": "string[]" }
+      ],
+      "headings": [],
+      "recipe": { "base": "structural", "deltas": {} },
+      "margin": ["suggestions"],
+      "affordances": [],
+      "infer": { "signals": [] }
+    },
+    {
+      "id": "changelog",
+      "family": "structural",
+      "epistemic": "generated",
+      "okf_type": "Changelog",
+      "fields": [
+        { "key": "project_ref", "required": false, "shape": "ref" }
+      ],
+      "headings": ["versioned entries"],
+      "recipe": { "base": "structural", "deltas": {} },
+      "margin": ["history"],
+      "affordances": [],
+      "infer": { "signals": ["versioned_entries"] }
+    }
+  ]
+}
