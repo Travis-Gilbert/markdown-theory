@@ -11,7 +11,15 @@
     "directory": "packages/markdown-spine"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    }
   },
   "type": "module",
   "exports": {
@@ -21,11 +29,12 @@
     }
   },
   "files": [
-    "dist",
-    "src"
+    "dist"
   ],
   "scripts": {
-    "test": "vitest run"
+    "test": "vitest run",
+    "build": "tsup",
+    "prepack": "tsup"
   },
   "dependencies": {
     "js-yaml": "^4.1.0",

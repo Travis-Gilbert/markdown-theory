@@ -23,6 +23,8 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm lint:literals
       - run: pnpm test
+      # Verify the publishable dist build (tsup .js + .d.ts) stays green.
+      - run: pnpm -r build
 
   visual:
     name: G7 gates (overflow / contrast / widow)

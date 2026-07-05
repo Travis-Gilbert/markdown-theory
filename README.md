@@ -46,16 +46,9 @@ package (MIT). Theorem is a downstream consumer, not the other way around.
 npm install @travisgilbert/markdown-theory react react-dom
 ```
 
-The package ships TypeScript source under its subpath exports. In a bundler that
-transpiles dependencies (Vite, esbuild) this just works; in **Next.js** add it to
-`transpilePackages`:
-
-```js
-// next.config.mjs
-export default {
-  transpilePackages: ["@travisgilbert/markdown-theory", "@travisgilbert/markdown-spine"],
-};
-```
+The package ships compiled ESM (`.js` plus `.d.ts`), so it works out of the box
+in any modern bundler or React framework: no `transpilePackages` and no JSX
+config required.
 
 ```tsx
 import { Galley } from "@travisgilbert/markdown-theory/react";

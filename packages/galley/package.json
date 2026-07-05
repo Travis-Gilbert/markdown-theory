@@ -11,7 +11,30 @@
     "directory": "packages/galley"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "exports": {
+      "./tokens": {
+        "types": "./dist/tokens/index.d.ts",
+        "default": "./dist/tokens/index.js"
+      },
+      "./css": "./dist/galley.css",
+      "./react": {
+        "types": "./dist/react/index.d.ts",
+        "default": "./dist/react/index.js"
+      },
+      "./templates": {
+        "types": "./dist/templates/index.d.ts",
+        "default": "./dist/templates/index.js"
+      },
+      "./shelf": {
+        "types": "./dist/shelf/index.d.ts",
+        "default": "./dist/shelf/index.js"
+      },
+      "./mdx": {
+        "types": "./dist/mdx/index.d.ts",
+        "default": "./dist/mdx/index.js"
+      }
+    }
   },
   "type": "module",
   "sideEffects": [
@@ -41,11 +64,18 @@
     }
   },
   "files": [
-    "dist",
-    "src"
+    "dist/tokens",
+    "dist/react",
+    "dist/templates",
+    "dist/shelf",
+    "dist/mdx",
+    "dist/galley.css",
+    "dist/types-*.d.ts"
   ],
   "scripts": {
-    "test": "vitest run"
+    "test": "vitest run",
+    "build": "rm -rf dist/tokens dist/react dist/templates dist/shelf dist/mdx dist/galley.css dist/types-*.d.ts && tsup",
+    "prepack": "pnpm run build"
   },
   "peerDependencies": {
     "react": "^18.3.0 || ^19.0.0",
