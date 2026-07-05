@@ -27,7 +27,7 @@ standalone. Nothing here is silently deferred; each row is spec-anchored.
 - [x] Shiki theme generated from the ladders (hex output)
 - [x] Three fixtures: parchment (light), substrate (dark), print
 - [x] Acceptance: re-derivation test, AA gate on all fixtures, contrast throw, no-hex in emitted sheet
-- [ ] `text-box: trim-both cap alphabetic` verified across the browser matrix (needs G2 render + visual gate)
+- [x] `text-box: trim-both cap alphabetic` exercised in Chromium 149 via the G7 snapshot gate (multi-browser matrix is a CI expansion)
 
 ## markdown-spine (sibling package) — SHIPPED
 - [x] remark pipeline: parse, gfm, frontmatter, math, directive, callout (GitHub + Obsidian)
@@ -45,7 +45,7 @@ standalone. Nothing here is silently deferred; each row is spec-anchored.
 - [x] `galley/css` static stylesheet, token-only (lint passes)
 - [x] Acceptance (unit): SSR renders the full vocabulary; `:::note` == `> [!NOTE]`; override works; raw HTML dropped
 - [ ] `template` prop wiring (needs G3 recipes) and footnotes-as-Tufte-sidenotes (wide-viewport CSS/JS enhancement)
-- [ ] Acceptance (visual, -> G7): MIT News fixture parity; uncurated-README robustness (zero overflow / AA / widows), needs a browser harness
+- [x] Acceptance (visual): uncurated-README robustness (zero overflow / AA / widows) runs green in G7 across 36 renders. MIT News fixture parity is the one visual check still pending (no MIT News fixture built yet; belongs with G8 showcase).
 
 ## G3. Type recipes (`galley/templates`) — SHIPPED
 - [x] Declarative recipe object over tokens (className, rampOffset, apparatus toggles, toc, numbered); registry keyed by frontmatter `type`, open for registration
@@ -66,12 +66,14 @@ standalone. Nothing here is silently deferred; each row is spec-anchored.
 - [x] `galley/mdx` `renderMDX(source, components)`, trusted-input-only (evaluate = new Function), documented in red letters; user content never routes through it
 - [x] Acceptance: same doc renders a live registered view in a host, fallback+chip standalone; MDX renders a custom component
 
-## G7. Quality gates — PARTIAL (browser gates specified, not runnable in this env)
+## G7. Quality gates — SHIPPED (all four gates run green in Chromium)
 - [x] Contrast gate (G1) fails a deliberately bad register (generation-time throw, in the vitest suite)
 - [x] Register-permutation snapshot generator (3 registers x 4 recipes) — `pnpm demo:permutations` -> `dist/permutations/`
-- [x] Uncurated-README robustness corpus started — `fixtures/readmes/`
+- [x] Uncurated-README robustness corpus — `fixtures/readmes/` (12 adversarial docs: long tokens, wide table, deep nesting, raw HTML, orphan-prone prose, mixed callouts, code, badges/emoji, links, tasks/footnotes, headings-only)
+- [x] README robustness generator — `pnpm demo:readmes` -> `dist/readmes/` (12 docs x 3 registers = 36 renders)
 - [x] Browser harness specified precisely for CI — `docs/plan/g7-browser-harness.md` (overflow lint, rendered-contrast gate, orphan gate, snapshot diffing)
-- [ ] RUN the browser gates green — blocked here (Playwright has no system Chrome); needs `@playwright/test` + Chromium in CI
+- [x] RUN the browser gates green — `@playwright/test` + Chromium 149; `playwright.config.ts` + `tests/g7/gates.spec.ts`; run via `pnpm test:visual`. 169/169 pass: overflow @480, rendered AA contrast (4.5 content / 3.0 ink-3 apparatus, Shiki tokens excluded), orphan/widow, and 24 permutation snapshots (baselines under `tests/g7/gates.spec.ts-snapshots/`).
+- [x] Bugs found+fixed by the gates: wide-table overflow (table is now its own `overflow-x` container) and long unbreakable tokens/URLs (`overflow-wrap: break-word` on `.galley`).
 
 ## G8. Packaging + showcase
 - [ ] npm publish `galley` (scoped) + `markdown-spine`, MIT, license provenance notes

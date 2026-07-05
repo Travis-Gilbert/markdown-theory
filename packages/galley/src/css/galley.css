@@ -21,6 +21,10 @@
   text-wrap: var(--gy-text-wrap-body);
   hanging-punctuation: var(--gy-hanging-punctuation);
   hyphens: var(--gy-hyphens);
+  /* Inherited: breaks long unbreakable tokens (URLs, identifiers) so they wrap
+   * inside the measure instead of pushing the column wider. No effect inside
+   * <pre> (white-space: pre disables wrapping), which keeps its overflow-x. */
+  overflow-wrap: break-word;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -206,9 +210,15 @@
   opacity: 1;
 }
 
-/* Tables */
+/* Tables. display:block makes the <table> its own overflow-x container: the rows
+ * fall into an anonymous table box that sizes to content and scrolls when wider
+ * than the measure, so a wide table never pushes the page. Works for any .galley
+ * markup, not only React-rendered output. */
 .galley table {
+  display: block;
   width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
   border-collapse: collapse;
   font-variant-numeric: tabular-nums;
   font-feature-settings: var(--gy-feat-tabular);
