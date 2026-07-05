@@ -76,9 +76,9 @@ standalone. Nothing here is silently deferred; each row is spec-anchored.
 - [x] Bugs found+fixed by the gates: wide-table overflow (table is now its own `overflow-x` container) and long unbreakable tokens/URLs (`overflow-wrap: break-word` on `.galley`).
 
 ## G8. Packaging + showcase
-- [ ] npm publish `galley` (scoped) + `markdown-spine`, MIT, license provenance notes
+- [~] npm publish — packages scoped and publish-ready as `@travisgilbert/markdown-theory` (renderer) + `@travisgilbert/markdown-spine` (parser), v0.1.0, `publishConfig.access=public`, repository/homepage/author set, MIT. Ships TS source (consumers transpile; Next.js `transpilePackages`). Blocked only on `npm login` on this machine; run `pnpm -r publish --access public` once authed. Follow-up: a dist build (tsup -> .js + .d.ts) for non-transpiling consumers.
 - [ ] OFL font subsetting strategy documented; system-stack fallback default
-- [ ] Showcase site: MIT News fixture, live register-axis playground, blog-of-memory demo
+- [ ] Showcase site: MIT News fixture, live register-axis playground, blog-of-memory demo (deferred per request)
 
 ## Out of scope (stated so nobody descopes into it)
 - Slides doctype — its own spec if wanted.

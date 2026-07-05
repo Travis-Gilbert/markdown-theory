@@ -1,8 +1,18 @@
 {
-  "name": "galley",
-  "version": "0.0.0",
+  "name": "@travisgilbert/markdown-theory",
+  "version": "0.1.0",
   "description": "A markdown renderer whose beauty is computed, not themed. MIT.",
   "license": "MIT",
+  "author": "Travis Gilbert",
+  "homepage": "https://github.com/Travis-Gilbert/markdown-theory#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Travis-Gilbert/markdown-theory.git",
+    "directory": "packages/galley"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "sideEffects": [
     "**/*.css"
@@ -52,7 +62,7 @@
     "@types/mdast": "^4.0.4",
     "hast-util-to-jsx-runtime": "^2.3.2",
     "katex": "^0.16.11",
-    "markdown-spine": "workspace:*",
+    "@travisgilbert/markdown-spine": "workspace:*",
     "mdast-util-to-hast": "^13.2.0",
     "shiki": "^1.24.2",
     "unist-util-visit": "^5.0.0"

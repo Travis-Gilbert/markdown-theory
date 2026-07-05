@@ -10,7 +10,7 @@
 
 import { toJsxRuntime, type Components } from "hast-util-to-jsx-runtime";
 import type { Root as MdRoot } from "mdast";
-import { extractFrontmatter, parseMarkdown } from "markdown-spine";
+import { extractFrontmatter, parseMarkdown } from "@travisgilbert/markdown-spine";
 import type { CSSProperties, ReactElement } from "react";
 import { Fragment, jsx, jsxs } from "react/jsx-runtime";
 import { type Recipe, resolveRecipe } from "../templates/recipes.js";

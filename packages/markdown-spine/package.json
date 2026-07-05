@@ -1,8 +1,18 @@
 {
-  "name": "markdown-spine",
-  "version": "0.0.0",
-  "description": "The remark parse pipeline behind galley: one mdast, one directive vocabulary. MIT.",
+  "name": "@travisgilbert/markdown-spine",
+  "version": "0.1.0",
+  "description": "The remark parse pipeline behind markdown-theory: one mdast, one directive vocabulary. MIT.",
   "license": "MIT",
+  "author": "Travis Gilbert",
+  "homepage": "https://github.com/Travis-Gilbert/markdown-theory#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Travis-Gilbert/markdown-theory.git",
+    "directory": "packages/markdown-spine"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "exports": {
     ".": {
