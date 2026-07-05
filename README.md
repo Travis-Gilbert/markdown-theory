@@ -1,15 +1,17 @@
+---
 # markdown-theory
 
+Computational Beauty. Markdown theory is designed to make your files look like a personal website or blog rather than a pile of files supports markdown-to-HTML markdown-to-react
+---
+
 A markdown renderer whose default output looks like a **publication, not a
-folder of files** — because beauty is *computed*, not themed. MIT licensed.
+folder of files** because beauty is *computed*, not themed. MIT licensed.
 Published as [`@travisgilbert/markdown-theory`](https://www.npmjs.com/package/@travisgilbert/markdown-theory).
 
 Point it at a markdown string, a directory, or a bundle and it renders a page
-that is good by construction, including content nobody stopped to style. It is a
-clean-room alternative to Quarkdown (GPL-3.0) and CodiMD (AGPL-3.0): those are
-visual references only — no code, no CSS, no ported themes.
+that is good by construction, including content nobody stopped to style
 
-## The three claims
+## The three
 
 1. **Beauty is computed, not themed.** A proportion engine derives every token
    — type ramp, leading, rhythm, page shape, an OKLCH palette solved for WCAG AA
