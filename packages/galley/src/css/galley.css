@@ -1,0 +1,535 @@
+/*
+ * galley/css -- the static typeset stylesheet (G2).
+ *
+ * A pure projection of the --gy-* tokens from galley/tokens. Usable without
+ * React: wrap content in `.galley` and use these class names.
+ *
+ * INVARIANT: no color, size, or spacing literal. The only permitted literal is
+ * the hairline, and it arrives as var(--gy-hairline) / var(--gy-border-width).
+ * Small structural nudges use em (relative to the local font size), never px.
+ * `pnpm lint:literals` enforces this.
+ */
+
+.galley {
+  color: var(--gy-ink);
+  background: var(--gy-surface);
+  font-family: var(--gy-font-prose);
+  font-size: var(--gy-text-body);
+  line-height: var(--gy-leading-body);
+  font-optical-sizing: var(--gy-optical-sizing);
+  font-feature-settings: var(--gy-feat-prose);
+  text-wrap: var(--gy-text-wrap-body);
+  hanging-punctuation: var(--gy-hanging-punctuation);
+  hyphens: var(--gy-hyphens);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.galley * {
+  box-sizing: border-box;
+}
+
+/* The page: measure-limited column, content optically high. */
+.galley-page {
+  max-width: var(--gy-measure);
+  margin-inline: auto;
+  padding-inline: var(--gy-space-4);
+}
+
+/* Vertical rhythm: the "owl" -- space between flow siblings, in lh. */
+.galley > * + *,
+.galley-flow > * + * {
+  margin-top: var(--gy-space-3);
+}
+
+/* Headings */
+.galley :is(h1, h2, h3, h4, h5, h6) {
+  line-height: var(--gy-leading-heading);
+  text-wrap: var(--gy-text-wrap-heading);
+  font-weight: 640;
+  letter-spacing: -0.011em;
+  text-box: trim-both cap alphabetic;
+}
+.galley h1 {
+  font-size: var(--gy-text-h1);
+  margin-top: var(--gy-space-2);
+}
+.galley h2 {
+  font-size: var(--gy-text-h2);
+  margin-top: var(--gy-space-5);
+}
+.galley h3 {
+  font-size: var(--gy-text-h3);
+  margin-top: var(--gy-space-4);
+}
+.galley h4 {
+  font-size: var(--gy-text-h4);
+  margin-top: var(--gy-space-4);
+}
+.galley h5 {
+  font-size: var(--gy-text-h5);
+  font-weight: 680;
+}
+.galley h6 {
+  font-size: var(--gy-text-h6);
+  font-weight: 680;
+  color: var(--gy-ink-2);
+}
+
+.galley p {
+  margin: 0;
+}
+
+/* Links */
+.galley a {
+  color: var(--gy-link);
+  text-underline-offset: 0.15em;
+  text-decoration-thickness: from-font;
+}
+.galley a:hover {
+  text-decoration-thickness: 0.08em;
+}
+
+/* Emphasis */
+.galley strong {
+  font-weight: 680;
+}
+
+/* Lists */
+.galley :is(ul, ol) {
+  padding-left: 1.3em;
+  margin: 0;
+}
+.galley li + li {
+  margin-top: var(--gy-space-1);
+}
+.galley li::marker {
+  color: var(--gy-ink-3);
+}
+
+/* Task lists */
+.galley .contains-task-list,
+.galley ul:has(> .task-list-item) {
+  list-style: none;
+  padding-left: 0.2em;
+}
+.galley .task-list-item {
+  display: flex;
+  gap: 0.5em;
+  align-items: baseline;
+}
+.galley .task-list-item input[type="checkbox"] {
+  accent-color: var(--gy-signal);
+  translate: 0 0.1em;
+}
+
+/* Blockquote (plain) */
+.galley blockquote {
+  margin: 0;
+  padding-left: var(--gy-space-3);
+  border-left: var(--gy-border-width) solid var(--gy-hairline);
+  color: var(--gy-ink-2);
+}
+
+/* Pull quote (a blockquote with an attribution line) */
+.galley blockquote:has(.galley-attr) {
+  font-size: var(--gy-text-h4);
+  line-height: 1.35;
+  color: var(--gy-ink);
+  border-left: 0.12em solid var(--gy-signal);
+  padding-left: var(--gy-space-3);
+}
+.galley .galley-attr {
+  display: block;
+  font-family: var(--gy-font-ui);
+  font-size: var(--gy-text-small);
+  color: var(--gy-ink-3);
+  margin-top: var(--gy-space-1);
+}
+
+/* Rules */
+.galley hr {
+  border: 0;
+  border-top: var(--gy-border-width) solid var(--gy-hairline);
+  margin-block: var(--gy-space-5);
+}
+
+/* Code */
+.galley code {
+  font-family: var(--gy-font-mono);
+  font-size: 0.92em;
+  font-feature-settings: var(--gy-feat-mono, "zero" 1);
+}
+.galley :not(pre) > code {
+  background: var(--gy-ground);
+  border: var(--gy-border-width) solid var(--gy-hairline);
+  border-radius: var(--gy-radius);
+  padding: 0.1em 0.35em;
+}
+.galley pre {
+  background: var(--gy-top);
+  border: var(--gy-border-width) solid var(--gy-hairline);
+  border-radius: var(--gy-radius-lg);
+  padding: var(--gy-space-3);
+  overflow-x: auto;
+  font-size: var(--gy-text-small);
+  line-height: 1.55;
+}
+.galley pre code {
+  background: none;
+  border: 0;
+  padding: 0;
+  font-size: inherit;
+}
+
+/* Code copy island */
+.galley-code {
+  position: relative;
+}
+.galley-copy {
+  position: absolute;
+  top: var(--gy-space-1);
+  right: var(--gy-space-1);
+  font-family: var(--gy-font-ui);
+  font-size: var(--gy-text-caption);
+  color: var(--gy-ink-3);
+  background: var(--gy-surface);
+  border: var(--gy-border-width) solid var(--gy-hairline);
+  border-radius: var(--gy-radius);
+  padding: 0.2em 0.6em;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+.galley-code:hover .galley-copy,
+.galley-copy:focus-visible {
+  opacity: 1;
+}
+
+/* Tables */
+.galley table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: var(--gy-feat-tabular);
+  font-size: var(--gy-text-small);
+}
+.galley :is(th, td) {
+  text-align: start;
+  padding: var(--gy-space-1) var(--gy-space-2);
+  border-bottom: var(--gy-border-width) solid var(--gy-hairline);
+}
+.galley th {
+  font-family: var(--gy-font-ui);
+  color: var(--gy-ink-2);
+  font-weight: 620;
+}
+
+/* Images and figures */
+.galley img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--gy-radius);
+}
+.galley-figure {
+  margin: 0;
+  text-align: center;
+}
+.galley-figure img {
+  border: var(--gy-border-width) solid var(--gy-hairline);
+}
+.galley-figure[data-align="left"] {
+  float: inline-start;
+  margin-right: var(--gy-space-3);
+}
+.galley-figure[data-align="right"] {
+  float: inline-end;
+  margin-left: var(--gy-space-3);
+}
+.galley-figcaption {
+  font-family: var(--gy-font-ui);
+  font-size: var(--gy-text-caption);
+  color: var(--gy-ink-3);
+  margin-top: var(--gy-space-1);
+}
+
+/* Abstract */
+.galley-abstract {
+  max-width: 54ch;
+  color: var(--gy-ink-2);
+  border-left: 0.12em solid var(--gy-hairline);
+  padding-left: var(--gy-space-3);
+}
+.galley-abstract-label {
+  display: block;
+  font-family: var(--gy-font-ui);
+  font-size: var(--gy-text-caption);
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.06em;
+  color: var(--gy-ink-3);
+  margin-bottom: var(--gy-space-1);
+}
+
+/* Callouts */
+.galley-callout {
+  border: var(--gy-border-width) solid var(--gy-hairline);
+  border-left-width: 0.2em;
+  border-radius: var(--gy-radius);
+  padding: var(--gy-space-2) var(--gy-space-3);
+  background: var(--gy-ground);
+}
+.galley-callout-label {
+  font-family: var(--gy-font-ui);
+  font-size: var(--gy-text-caption);
+  font-weight: 680;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: var(--gy-space-1);
+  color: var(--gy-ink-2);
+}
+.galley-callout[data-kind="note"] {
+  border-left-color: var(--gy-link);
+}
+.galley-callout[data-kind="tip"] {
+  border-left-color: var(--gy-link);
+}
+.galley-callout[data-kind="warning"],
+.galley-callout[data-kind="danger"] {
+  border-left-color: var(--gy-signal);
+}
+.galley-callout[data-kind="warning"] .galley-callout-label,
+.galley-callout[data-kind="danger"] .galley-callout-label {
+  color: var(--gy-signal);
+}
+.galley-callout[data-kind="quote"] {
+  border-left-color: var(--gy-ink-3);
+  font-style: italic;
+}
+
+/* Embed / view fallback + unknown-view chip */
+.galley-embed {
+  border: var(--gy-border-width) dashed var(--gy-hairline);
+  border-radius: var(--gy-radius);
+  padding: var(--gy-space-2) var(--gy-space-3);
+}
+.galley-chip {
+  display: inline-block;
+  font-family: var(--gy-font-ui);
+  font-size: var(--gy-text-caption);
+  color: var(--gy-ink-3);
+  background: var(--gy-ground);
+  border: var(--gy-border-width) solid var(--gy-hairline);
+  border-radius: var(--gy-radius-lg);
+  padding: 0.1em 0.6em;
+}
+
+/* Footnotes (default section; sidenote placement is a wide-viewport enhancement) */
+.galley .footnotes {
+  font-size: var(--gy-text-small);
+  color: var(--gy-ink-2);
+  border-top: var(--gy-border-width) solid var(--gy-hairline);
+  margin-top: var(--gy-space-6);
+  padding-top: var(--gy-space-2);
+}
+.galley .data-footnote-backref {
+  text-decoration: none;
+}
+
+/* Math (KaTeX supplies its own CSS; galley only sets flow color) */
+.galley .katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* Stamp (rail-head glyph placeholder; the D3 force panel is a host island) */
+.galley-stamp {
+  font-family: var(--gy-font-ui);
+  font-size: var(--gy-text-caption);
+  color: var(--gy-ink-3);
+}
+
+/* ---- Type recipes (G3) ------------------------------------------------- */
+
+/* Unknown-type fallback chip */
+.galley-typechip {
+  display: inline-block;
+  font-family: var(--gy-font-ui);
+  font-size: var(--gy-text-caption);
+  color: var(--gy-ink-3);
+  background: var(--gy-ground);
+  border: var(--gy-border-width) solid var(--gy-hairline);
+  border-radius: var(--gy-radius-lg);
+  padding: 0.1em 0.6em;
+}
+
+/* Apparatus */
+.galley-standfirst {
+  font-family: var(--gy-font-ui);
+  font-size: var(--gy-text-h4);
+  line-height: 1.4;
+  color: var(--gy-ink-2);
+}
+.galley-authorline {
+  font-family: var(--gy-font-ui);
+  font-size: var(--gy-text-small);
+  color: var(--gy-ink-3);
+}
+
+/* article: optional numbered headings + a margin author line */
+.galley-article[data-numbered] {
+  counter-reset: gy-h2;
+}
+.galley-article[data-numbered] h2 {
+  counter-increment: gy-h2;
+}
+.galley-article[data-numbered] h2::before {
+  content: counter(gy-h2) ". ";
+  color: var(--gy-ink-3);
+}
+
+/* note: quieter heading ramp, dates to the right */
+.galley-note :is(h1, h2, h3) {
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+/* reference: one ramp step down, persistent ToC, definition-list styling */
+.galley-reference {
+  --gy-text-h1: var(--gy-size-3);
+  --gy-text-h2: var(--gy-size-2);
+  --gy-text-h3: var(--gy-size-1);
+  --gy-text-h4: var(--gy-size-0);
+  --gy-text-body: var(--gy-size-n1);
+}
+.galley-reference dt {
+  font-weight: 680;
+}
+.galley-reference dd {
+  margin-inline-start: 1.5em;
+  color: var(--gy-ink-2);
+}
+.galley-toc {
+  font-family: var(--gy-font-ui);
+  font-size: var(--gy-text-small);
+  border-left: 0.12em solid var(--gy-hairline);
+  padding-left: var(--gy-space-3);
+}
+.galley-toc ol {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+.galley-toc a {
+  color: var(--gy-ink-2);
+  text-decoration: none;
+}
+.galley-toc a:hover {
+  color: var(--gy-link);
+}
+.galley-toc li[data-depth="2"] {
+  padding-inline-start: 1em;
+}
+.galley-toc li[data-depth="3"] {
+  padding-inline-start: 2em;
+}
+
+/* log: date-grouped timeline */
+.galley-log h2 {
+  font-size: var(--gy-text-h4);
+  color: var(--gy-ink-2);
+}
+
+/* ---- Shelf (G4) -------------------------------------------------------- */
+
+.galley-shelf {
+  font-family: var(--gy-font-prose);
+  color: var(--gy-ink);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gy-space-5);
+  max-width: var(--gy-measure);
+  margin-inline: auto;
+}
+.galley-shelf-stream,
+.galley-shelf-archive section,
+.galley-shelf-tags section,
+.galley-shelf-thread {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gy-space-2);
+}
+.galley-shelf-archive,
+.galley-shelf-tags {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gy-space-5);
+}
+.galley-shelf-heading {
+  font-family: var(--gy-font-ui);
+  font-size: var(--gy-text-h5);
+  color: var(--gy-ink-2);
+  border-bottom: var(--gy-border-width) solid var(--gy-hairline);
+  padding-bottom: var(--gy-space-1);
+}
+
+.galley-card {
+  padding-block: var(--gy-space-2);
+  border-bottom: var(--gy-border-width) solid var(--gy-hairline);
+}
+.galley-card-title {
+  display: block;
+  font-size: var(--gy-text-h4);
+  font-weight: 640;
+  color: var(--gy-ink);
+  text-decoration: none;
+  text-wrap: var(--gy-text-wrap-heading);
+}
+.galley-card-title:hover {
+  color: var(--gy-link);
+}
+.galley-card-deck {
+  color: var(--gy-ink-2);
+  margin-top: var(--gy-space-1);
+}
+.galley-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gy-space-2);
+  align-items: baseline;
+  font-family: var(--gy-font-ui);
+  font-size: var(--gy-text-caption);
+  color: var(--gy-ink-3);
+  margin-top: var(--gy-space-1);
+}
+.galley-card-kind {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--gy-signal);
+}
+.galley-card-tag::before {
+  content: "#";
+  color: var(--gy-ink-3);
+}
+/* Card shape follows the item's kind (the recipe family). */
+.galley-card[data-kind="note"] .galley-card-title {
+  font-weight: 600;
+}
+.galley-card[data-kind="reference"] .galley-card-title {
+  font-family: var(--gy-font-ui);
+}
+.galley-thread-lineage,
+.galley-thread-connected {
+  font-family: var(--gy-font-ui);
+  font-size: var(--gy-text-small);
+  color: var(--gy-ink-3);
+}
+.galley-thread-lineage a,
+.galley-thread-connected a {
+  color: var(--gy-link);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .galley-copy {
+    transition: none;
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "name": "markdown-spine",
+  "version": "0.0.0",
+  "description": "The remark parse pipeline behind galley: one mdast, one directive vocabulary. MIT.",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0",
+    "mdast-util-directive": "^3.0.0",
+    "remark-directive": "^4.0.0",
+    "remark-frontmatter": "^5.0.0",
+    "remark-gfm": "^4.0.1",
+    "remark-math": "^6.0.0",
+    "remark-parse": "^11.0.0",
+    "unified": "^11.0.5",
+    "unist-util-visit": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
+    "@types/mdast": "^4.0.4",
+    "@types/unist": "^3.0.3"
+  },
+  "keywords": [
+    "markdown",
+    "remark",
+    "mdast",
+    "directives",
+    "frontmatter"
+  ]
+}
