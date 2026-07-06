@@ -8,9 +8,7 @@ with output that is good by construction. MIT licensed. Published as
 A markdown renderer whose default output looks like a **publication, not a folder
 of files**, because beauty is *computed*, not themed. Point it at a markdown
 string, a directory, or a bundle and it renders a page that is good by
-construction, including content nobody stopped to style. It is a clean-room
-alternative to Quarkdown (GPL-3.0) and CodiMD (AGPL-3.0): those are visual
-references only, no code, no CSS, no ported themes.
+construction, including content nobody stopped to style. 
 
 ## The three claims
 
@@ -82,5 +80,4 @@ pnpm demo:tokens   # emits packages/galley/dist/{tokens.css, demo.html}
 
 MIT. markdown-theory was built under the working codename **galley** (the tray
 that holds set type before imposition: same set type, many pages); the internal
-package directory keeps that name. Visual references (Quarkdown, CodiMD) are named
-for provenance only; no code derives from them.
+package directory keeps that name. 
