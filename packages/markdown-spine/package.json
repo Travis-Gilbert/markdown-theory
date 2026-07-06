@@ -1,5 +1,5 @@
 {
-  "name": "@travisgilbert/markdown-spine",
+  "name": "@travis-gilbert/markdown-spine",
   "version": "0.1.0",
   "description": "The remark parse pipeline behind markdown-theory: one mdast, one directive vocabulary. MIT.",
   "license": "MIT",

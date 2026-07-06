@@ -34,7 +34,10 @@ importers:
       '@mdx-js/mdx':
         specifier: ^3.1.0
         version: 3.1.1
-      '@travisgilbert/markdown-spine':
+      '@travis-gilbert/document-types':
+        specifier: workspace:*
+        version: link:../document-types
+      '@travis-gilbert/markdown-spine':
         specifier: workspace:*
         version: link:../markdown-spine
       '@types/hast':

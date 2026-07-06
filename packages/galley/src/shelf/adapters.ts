@@ -5,7 +5,7 @@
  */
 
 import type { Nodes, Root } from "mdast";
-import { extractFrontmatter, parseMarkdown } from "@travisgilbert/markdown-spine";
+import { extractFrontmatter, parseMarkdown } from "@travis-gilbert/markdown-spine";
 import type { ShelfAdapter, ShelfEdge, ShelfItem, ShelfScope } from "./types.js";
 
 function str(v: unknown): string | undefined {

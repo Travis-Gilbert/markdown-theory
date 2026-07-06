@@ -3,7 +3,7 @@
 **Computational beauty.** markdown-theory makes your files read like a personal
 website or blog rather than a pile of files: markdown to HTML, markdown to React,
 with output that is good by construction. MIT licensed. Published as
-[`@travisgilbert/markdown-theory`](https://www.npmjs.com/package/@travisgilbert/markdown-theory).
+[`@travis-gilbert/markdown-theory`](https://www.npmjs.com/package/@travis-gilbert/markdown-theory).
 
 A markdown renderer whose default output looks like a **publication, not a folder
 of files**, because beauty is *computed*, not themed. Point it at a markdown
@@ -26,24 +26,24 @@ references only, no code, no CSS, no ported themes.
 
 ## Package shape
 
-Subpath exports of `@travisgilbert/markdown-theory`:
+Subpath exports of `@travis-gilbert/markdown-theory`:
 
 | Export | What it is | Status |
 |---|---|---|
-| `@travisgilbert/markdown-theory/tokens` | The proportion engine. Framework-free; emits CSS custom properties. | G1 |
-| `@travisgilbert/markdown-theory/css` | The static stylesheet consuming those properties. Usable without React. | G2 |
-| `@travisgilbert/markdown-theory/react` | Components. Server-safe; interactive nodes are islands. | G2 |
-| `@travisgilbert/markdown-theory/templates` | Type recipes and their registry (article, note, reference, log). | G3 |
-| `@travisgilbert/markdown-theory/shelf` | Collection views plus the adapter interface (fs, okf, theorem). | G4 |
-| `@travisgilbert/markdown-theory/mdx` | Optional, trusted-authors-only MDX entry. | G5 |
+| `@travis-gilbert/markdown-theory/tokens` | The proportion engine. Framework-free; emits CSS custom properties. | G1 |
+| `@travis-gilbert/markdown-theory/css` | The static stylesheet consuming those properties. Usable without React. | G2 |
+| `@travis-gilbert/markdown-theory/react` | Components. Server-safe; interactive nodes are islands. | G2 |
+| `@travis-gilbert/markdown-theory/templates` | Type recipes and their registry (article, note, reference, log). | G3 |
+| `@travis-gilbert/markdown-theory/shelf` | Collection views plus the adapter interface (fs, okf, theorem). | G4 |
+| `@travis-gilbert/markdown-theory/mdx` | Optional, trusted-authors-only MDX entry. | G5 |
 
-Parsing lives in the sibling [`@travisgilbert/markdown-spine`](https://www.npmjs.com/package/@travisgilbert/markdown-spine)
+Parsing lives in the sibling [`@travis-gilbert/markdown-spine`](https://www.npmjs.com/package/@travis-gilbert/markdown-spine)
 package (MIT). Theorem is a downstream consumer, not the other way around.
 
 ## Install
 
 ```bash
-npm install @travisgilbert/markdown-theory react react-dom
+npm install @travis-gilbert/markdown-theory react react-dom
 ```
 
 The package ships compiled ESM (`.js` plus `.d.ts`), so it works out of the box
@@ -51,9 +51,9 @@ in any modern bundler or React framework: no `transpilePackages` and no JSX
 config required.
 
 ```tsx
-import { Galley } from "@travisgilbert/markdown-theory/react";
-import { parchment } from "@travisgilbert/markdown-theory/tokens";
-import "@travisgilbert/markdown-theory/css";
+import { Galley } from "@travis-gilbert/markdown-theory/react";
+import { parchment } from "@travis-gilbert/markdown-theory/tokens";
+import "@travis-gilbert/markdown-theory/css";
 
 export default function Page({ doc }: { doc: string }) {
   return <Galley doc={doc} register={parchment()} />;
@@ -63,7 +63,7 @@ export default function Page({ doc }: { doc: string }) {
 Or drive the engine directly:
 
 ```ts
-import { generateRegister, emitCss, parchment } from "@travisgilbert/markdown-theory/tokens";
+import { generateRegister, emitCss, parchment } from "@travis-gilbert/markdown-theory/tokens";
 
 const css = emitCss(parchment());                            // a ready-to-use :root sheet
 const custom = generateRegister({ ratio: 1.618, hue: 250 }); // re-derives everything

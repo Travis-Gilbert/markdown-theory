@@ -8,7 +8,7 @@
 import type { Element, ElementContent, Properties, Root as HastRoot } from "hast";
 import type { Root as MdRoot } from "mdast";
 import { defaultHandlers, type State, toHast } from "mdast-util-to-hast";
-import type { SpineAnnotation } from "@travisgilbert/markdown-spine";
+import type { SpineAnnotation } from "@travis-gilbert/markdown-spine";
 import { visit } from "unist-util-visit";
 import { slugify } from "../templates/recipes.js";
 

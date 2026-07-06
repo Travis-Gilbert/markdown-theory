@@ -1,5 +1,5 @@
 {
-  "name": "@travisgilbert/document-types",
+  "name": "@travis-gilbert/document-types",
   "version": "0.1.0",
   "description": "The document type taxonomy for markdown-theory and Theorem: one canonical descriptor file (structure, render recipe, marginalia, affordances) read by TS and Rust. MIT.",
   "license": "MIT",
