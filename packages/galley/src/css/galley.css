@@ -385,36 +385,47 @@
   color: var(--gy-ink-3);
 }
 
-/* article: optional numbered headings + a margin author line */
-.galley-article[data-numbered] {
+/* Numbered headings via CSS counters. The article delta and the procedure and
+ * working families all opt in through data-numbered; one counter, three homes. */
+.galley-article[data-numbered],
+.galley-family-procedure[data-numbered],
+.galley-family-working[data-numbered] {
   counter-reset: gy-h2;
 }
-.galley-article[data-numbered] h2 {
+.galley-article[data-numbered] h2,
+.galley-family-procedure[data-numbered] h2,
+.galley-family-working[data-numbered] h2 {
   counter-increment: gy-h2;
 }
-.galley-article[data-numbered] h2::before {
+.galley-article[data-numbered] h2::before,
+.galley-family-procedure[data-numbered] h2::before,
+.galley-family-working[data-numbered] h2::before {
   content: counter(gy-h2) ". ";
   color: var(--gy-ink-3);
 }
 
-/* note: quieter heading ramp, dates to the right */
-.galley-note :is(h1, h2, h3) {
+/* note + record family: quieter heading ramp, dates to the right */
+.galley-note :is(h1, h2, h3),
+.galley-family-record :is(h1, h2, h3) {
   font-weight: 600;
   letter-spacing: 0;
 }
 
-/* reference: one ramp step down, persistent ToC, definition-list styling */
-.galley-reference {
+/* reference + reference family: one ramp step down, ToC, definition-list styling */
+.galley-reference,
+.galley-family-reference {
   --gy-text-h1: var(--gy-size-3);
   --gy-text-h2: var(--gy-size-2);
   --gy-text-h3: var(--gy-size-1);
   --gy-text-h4: var(--gy-size-0);
   --gy-text-body: var(--gy-size-n1);
 }
-.galley-reference dt {
+.galley-reference dt,
+.galley-family-reference dt {
   font-weight: 680;
 }
-.galley-reference dd {
+.galley-reference dd,
+.galley-family-reference dd {
   margin-inline-start: 1.5em;
   color: var(--gy-ink-2);
 }
@@ -443,10 +454,93 @@
   padding-inline-start: 2em;
 }
 
-/* log: date-grouped timeline */
-.galley-log h2 {
+/* log + structural family: quiet, smaller section heads (date/section markers) */
+.galley-log h2,
+.galley-family-structural h2 {
   font-size: var(--gy-text-h4);
   color: var(--gy-ink-2);
+}
+
+/* ---- Type families (T2): per-family shape ------------------------------ */
+/*
+ * Six family bases carry the render load (HANDOFF-DOCUMENT-TYPES): prose = the
+ * article shape, reference = dense schema, procedure = numbered method, record =
+ * note-with-provenance, working = spec-with-status, structural = list/timeline.
+ * The shared ramp, quiet-heading, and numbered rules above already fold the
+ * families into the legacy recipe rules; these are the details unique to each.
+ * Token-only, like the rest of this sheet: --gy-* plus em/ch/unitless.
+ */
+
+/* prose: an editorial title rule under the opening heading. */
+.galley-family-prose > h1:first-of-type {
+  padding-bottom: var(--gy-space-1);
+  border-bottom: var(--gy-border-width) solid var(--gy-hairline);
+}
+
+/* reference: denser than the reading owl, small-caps column heads. */
+.galley-family-reference > * + * {
+  margin-top: var(--gy-space-2);
+}
+.galley-family-reference th {
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.04em;
+}
+
+/* procedure: ordered lists read as numbered steps with a signal chip. */
+.galley-family-procedure ol {
+  padding-left: 0;
+  list-style: none;
+  counter-reset: gy-step;
+}
+.galley-family-procedure ol > li {
+  counter-increment: gy-step;
+  position: relative;
+  padding-left: 2.4em;
+}
+.galley-family-procedure ol > li::before {
+  content: counter(gy-step);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1.7em;
+  height: 1.7em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--gy-font-ui);
+  font-size: var(--gy-text-caption);
+  font-variant-numeric: tabular-nums;
+  color: var(--gy-surface);
+  background: var(--gy-signal);
+  border-radius: var(--gy-radius-lg);
+}
+
+/* record: provenance dates float to the trailing edge. */
+.galley-family-record time,
+.galley-family-record .galley-date {
+  float: inline-end;
+  font-family: var(--gy-font-ui);
+  font-size: var(--gy-text-small);
+  color: var(--gy-ink-3);
+}
+
+/* working: a signal rule marks deliverable section heads (status chrome). */
+.galley-family-working h2 {
+  padding-left: var(--gy-space-2);
+  border-left: 0.16em solid var(--gy-signal);
+}
+
+/* structural: ui-font section heads, a hairline rail down list bodies. */
+.galley-family-structural h2 {
+  font-family: var(--gy-font-ui);
+}
+.galley-family-structural :is(ul, ol) {
+  border-left: var(--gy-border-width) solid var(--gy-hairline);
+  padding-left: var(--gy-space-3);
+  margin-left: 0;
+}
+.galley-family-structural li + li {
+  margin-top: var(--gy-space-2);
 }
 
 /* ---- Shelf (G4) -------------------------------------------------------- */
