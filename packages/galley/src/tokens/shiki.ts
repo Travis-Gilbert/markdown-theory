@@ -66,14 +66,29 @@ export function buildShikiTheme(reg: Register, name = "galley"): ShikiTheme {
       "editor.foreground": ink,
     },
     tokenColors: [
-      { scope: ["comment", "punctuation.definition.comment"], settings: { foreground: ink3, fontStyle: "italic" } },
+      {
+        scope: ["comment", "punctuation.definition.comment"],
+        settings: { foreground: ink3, fontStyle: "italic" },
+      },
       { scope: ["punctuation", "meta.brace"], settings: { foreground: ink2 } },
       { scope: ["variable", "meta.definition.variable"], settings: { foreground: ink } },
-      { scope: ["keyword", "storage", "keyword.control", "storage.type"], settings: { foreground: keyword } },
-      { scope: ["string", "string.quoted", "punctuation.definition.string"], settings: { foreground: str } },
-      { scope: ["entity.name.function", "support.function", "meta.function-call"], settings: { foreground: fn } },
+      {
+        scope: ["keyword", "storage", "keyword.control", "storage.type"],
+        settings: { foreground: keyword },
+      },
+      {
+        scope: ["string", "string.quoted", "punctuation.definition.string"],
+        settings: { foreground: str },
+      },
+      {
+        scope: ["entity.name.function", "support.function", "meta.function-call"],
+        settings: { foreground: fn },
+      },
       { scope: ["constant.numeric", "constant.language"], settings: { foreground: num } },
-      { scope: ["entity.name.type", "support.type", "entity.name.class"], settings: { foreground: type } },
+      {
+        scope: ["entity.name.type", "support.type", "entity.name.class"],
+        settings: { foreground: type },
+      },
       { scope: ["string.regexp", "constant.character.escape"], settings: { foreground: regexp } },
       { scope: ["markup.bold"], settings: { fontStyle: "bold" } },
       { scope: ["markup.italic"], settings: { fontStyle: "italic" } },

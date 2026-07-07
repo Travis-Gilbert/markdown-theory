@@ -1,0 +1,24 @@
+/*
+ * galley/fonts -- the documented loaded-font path (P7).
+ *
+ * The package default is system stacks (host-supplied; see DEFAULT_FONTS). Import
+ * this subpath to self-host the register's intended faces: Vollkorn (prose),
+ * Encode Sans Semi Expanded (title), IBM Plex Sans (ui), JetBrains Mono 500
+ * (mono). It re-exports @fontsource, so a consumer installs the peers and a
+ * bundler resolves these @import specifiers:
+ *
+ *     import "@travis-gilbert/markdown-theory/fonts";
+ *     pnpm add @fontsource/vollkorn @fontsource/encode-sans-semi-expanded \
+ *       @fontsource/ibm-plex-sans @fontsource/jetbrains-mono
+ *
+ * A fresh consumer that skips this still renders acceptably on the system-stack
+ * fallbacks. Without a bundler (a plain <link>/<style> page), inline the faces
+ * yourself; the demos do exactly that (scripts/fonts.ts).
+ */
+@import "@fontsource/vollkorn/400.css";
+@import "@fontsource/vollkorn/400-italic.css";
+@import "@fontsource/vollkorn/600.css";
+@import "@fontsource/encode-sans-semi-expanded/600.css";
+@import "@fontsource/ibm-plex-sans/400.css";
+@import "@fontsource/ibm-plex-sans/500.css";
+@import "@fontsource/jetbrains-mono/500.css";

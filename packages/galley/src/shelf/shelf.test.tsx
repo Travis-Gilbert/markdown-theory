@@ -1,11 +1,7 @@
 import { fileURLToPath } from "node:url";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
-import {
-  arrayAdapter,
-  okfAdapter,
-  theoremAdapter,
-} from "./adapters.js";
+import { arrayAdapter, okfAdapter, theoremAdapter } from "./adapters.js";
 import { fsAdapter } from "./fsAdapter.js";
 import { Shelf, successorOf } from "./Shelf.js";
 import type { ShelfEdge, ShelfItem } from "./types.js";
@@ -53,7 +49,13 @@ describe("pure adapters", () => {
   it("okfAdapter maps concepts and their links", () => {
     const s = okfAdapter({
       concepts: [
-        { id: "bitcoin", type: "Concept", title: "Bitcoin", tags: ["crypto"], links: ["blockchain"] },
+        {
+          id: "bitcoin",
+          type: "Concept",
+          title: "Bitcoin",
+          tags: ["crypto"],
+          links: ["blockchain"],
+        },
         { id: "blockchain", title: "Blockchain" },
       ],
     });

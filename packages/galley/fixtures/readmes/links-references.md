@@ -1,11 +1,10 @@
 # links-references
 
-A paragraph dense with [inline links][a], [reference links][b], and [autolinks]
-that must remain legible and AA-contrast against the surface, while long link
-destinations never widen the column.
+A paragraph dense with [inline links][a], [reference links][b], and [autolinks] that must remain
+legible and AA-contrast against the surface, while long link destinations never widen the column.
 
-See the [documentation][a], the [changelog][b], the [contributing guide][c], and
-the [very long canonical URL][d] for details, then read [autolinks] once more.
+See the [documentation][a], the [changelog][b], the [contributing guide][c], and the [very long
+canonical URL][d] for details, then read [autolinks] once more.
 
 [a]: https://example.com/docs
 [b]: https://example.com/changelog

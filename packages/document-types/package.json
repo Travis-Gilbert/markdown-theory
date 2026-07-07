@@ -1,0 +1,49 @@
+{
+  "name": "@travis-gilbert/document-types",
+  "version": "0.1.0",
+  "description": "The document type taxonomy for markdown-theory and Theorem: one canonical descriptor file (structure, render recipe, marginalia, affordances) read by TS and Rust. MIT.",
+  "license": "MIT",
+  "author": "Travis Gilbert",
+  "homepage": "https://github.com/Travis-Gilbert/markdown-theory#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Travis-Gilbert/markdown-theory.git",
+    "directory": "packages/document-types"
+  },
+  "publishConfig": {
+    "access": "public",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "./types.json": "./types.json"
+    }
+  },
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./types.json": "./types.json"
+  },
+  "files": [
+    "dist",
+    "types.json"
+  ],
+  "scripts": {
+    "test": "vitest run",
+    "build": "tsup",
+    "prepack": "tsup"
+  },
+  "keywords": [
+    "document-types",
+    "taxonomy",
+    "markdown",
+    "design-tokens",
+    "okf"
+  ]
+}

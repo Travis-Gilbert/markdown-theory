@@ -21,9 +21,4 @@ export { extractFrontmatter } from "./frontmatter.js";
 
 export { type BlockRef, blockIds, gatherText } from "./blocks.js";
 
-export {
-  createProcessor,
-  parseDocument,
-  parseMarkdown,
-  type SpineDocument,
-} from "./parse.js";
+export { createProcessor, parseDocument, parseMarkdown, type SpineDocument } from "./parse.js";

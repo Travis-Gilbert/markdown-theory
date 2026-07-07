@@ -75,6 +75,8 @@ export interface Palette {
   ink3: string;
   /** Hairline color (the one literal the spec permits). */
   hairline: string;
+  /** Inline-code tint: ink mixed a few percent into surface (a highlight, not a chip). */
+  tint: string;
   /** Signal / accent, AA-solved. */
   signal: string;
   /** Pressed signal, one step darker/lighter. */
@@ -131,8 +133,13 @@ export interface Register {
   rhythm: Rhythm;
   detailing: Detailing;
   fonts: {
+    /** Body prose face (serif by default). */
     prose: string;
+    /** Display face for the masthead title. */
+    title: string;
+    /** UI / apparatus face (byline, captions, labels). */
     ui: string;
+    /** Code / monospace face. */
     mono: string;
   };
   /** Advisory contrast report, one entry per solved pairing. */

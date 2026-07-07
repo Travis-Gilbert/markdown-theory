@@ -115,10 +115,49 @@ describe("emit", () => {
     expect(css.startsWith(".gy-substrate {")).toBe(true);
   });
 
-  it("emits a full variable map", () => {
+  it("emits a full variable map with the four font roles", () => {
     const vars = emitRegisterVars(print());
     expect(Object.keys(vars).length).toBeGreaterThan(30);
-    expect(vars["--gy-font-prose"]).toContain("Vollkorn");
+    expect(vars["--gy-font-prose"]).toContain("IBM Plex Sans");
+    expect(vars["--gy-font-title"]).toContain("Encode Sans Semi Expanded");
+    expect(vars["--gy-font-ui"]).toContain("IBM Plex Sans");
+    expect(vars["--gy-font-mono"]).toContain("JetBrains Mono");
+  });
+});
+
+describe("page object + shape tokens (HANDOFF-GALLEY-PAGE P1/P3/P4)", () => {
+  it("spends the canon into page pads: block-start smaller than block-end", () => {
+    const vars = emitRegisterVars(parchment());
+    const px = (v: string) => Number(v.replace("px", ""));
+    expect(vars["--gy-page-pad-inline"]).toMatch(/^clamp\(\d+px, [\d.]+vw, \d+px\)$/);
+    // Content optically high: less pad above the block than below it.
+    expect(px(vars["--gy-page-pad-block-start"]!)).toBeLessThan(
+      px(vars["--gy-page-pad-block-end"]!),
+    );
+  });
+
+  it("differentiates elevation by register: parchment/print float, substrate sits flat", () => {
+    expect(emitRegisterVars(parchment())["--gy-shadow"]).not.toBe("none");
+    expect(emitRegisterVars(print())["--gy-shadow"]).not.toBe("none");
+    expect(emitRegisterVars(substrate())["--gy-shadow"]).toBe("none");
+    expect(emitRegisterVars(substrate())["--gy-page-border"]).toBe("none");
+  });
+
+  it("caps the small radius at a hairline-adjacent 2-3px (nothing inline is a pill)", () => {
+    for (const reg of [parchment(), substrate(), print()]) {
+      const r = Number(emitRegisterVars(reg)["--gy-radius-sm"]!.replace("px", ""));
+      expect(r).toBeGreaterThanOrEqual(2);
+      expect(r).toBeLessThanOrEqual(3);
+    }
+  });
+
+  it("emits a tint distinct from the surface, and the ink-on-tint pairing clears AA", () => {
+    const reg = parchment();
+    const vars = emitRegisterVars(reg);
+    expect(vars["--gy-tint"]).toContain("oklch(");
+    expect(vars["--gy-tint"]).not.toBe(vars["--gy-surface"]);
+    const onTint = reg.contrast.find((c) => c.pair === "ink on tint");
+    expect(onTint?.passesAA).toBe(true);
   });
 });
 

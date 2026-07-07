@@ -24,17 +24,12 @@ export {
   generateRegister,
   type GenerateOptions,
   resolveAxes,
+  SERIF_PROSE,
 } from "./register.js";
 
 export { emitCss, emitRegisterVars } from "./emit.js";
 
-export {
-  buildRamp,
-  buildRhythm,
-  HEADING_LEADING,
-  quarterPixel,
-  solveLeading,
-} from "./scale.js";
+export { buildRamp, buildRhythm, HEADING_LEADING, quarterPixel, solveLeading } from "./scale.js";
 
 export { buildPage } from "./page.js";
 
@@ -54,6 +49,7 @@ export { buildShikiTheme, type ShikiTheme } from "./shiki.js";
 export {
   apcaLc,
   inGamut,
+  mixOklch,
   oklchCss,
   type Oklch,
   oklchToSrgb,

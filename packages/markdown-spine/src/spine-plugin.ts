@@ -67,7 +67,10 @@ function annotateDirective(node: AnyDirective): void {
   }
   if (name === "figure") {
     const caption = attributes.caption ?? directiveLabel(node);
-    annotate(node, { type: "figure", attributes: caption ? { ...attributes, caption } : attributes });
+    annotate(node, {
+      type: "figure",
+      attributes: caption ? { ...attributes, caption } : attributes,
+    });
     return;
   }
   if (name === "margin") {

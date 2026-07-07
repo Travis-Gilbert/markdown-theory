@@ -1,5 +1,5 @@
 {
-  "name": "@travisgilbert/markdown-theory",
+  "name": "@travis-gilbert/markdown-theory",
   "version": "0.1.0",
   "description": "A markdown renderer whose beauty is computed, not themed. MIT.",
   "license": "MIT",
@@ -18,6 +18,7 @@
         "default": "./dist/tokens/index.js"
       },
       "./css": "./dist/galley.css",
+      "./fonts": "./dist/fonts.css",
       "./react": {
         "types": "./dist/react/index.d.ts",
         "default": "./dist/react/index.js"
@@ -46,6 +47,7 @@
       "default": "./src/tokens/index.ts"
     },
     "./css": "./src/css/galley.css",
+    "./fonts": "./src/css/fonts.css",
     "./react": {
       "types": "./src/react/index.ts",
       "default": "./src/react/index.ts"
@@ -70,11 +72,12 @@
     "dist/shelf",
     "dist/mdx",
     "dist/galley.css",
+    "dist/fonts.css",
     "dist/types-*.d.ts"
   ],
   "scripts": {
     "test": "vitest run",
-    "build": "rm -rf dist/tokens dist/react dist/templates dist/shelf dist/mdx dist/galley.css dist/types-*.d.ts && tsup",
+    "build": "rm -rf dist/tokens dist/react dist/templates dist/shelf dist/mdx dist/galley.css dist/fonts.css dist/types-*.d.ts && tsup",
     "prepack": "pnpm run build"
   },
   "peerDependencies": {
@@ -88,16 +91,21 @@
   },
   "dependencies": {
     "@mdx-js/mdx": "^3.1.0",
+    "@travis-gilbert/document-types": "workspace:*",
+    "@travis-gilbert/markdown-spine": "workspace:*",
     "@types/hast": "^3.0.4",
     "@types/mdast": "^4.0.4",
     "hast-util-to-jsx-runtime": "^2.3.2",
     "katex": "^0.16.11",
-    "@travisgilbert/markdown-spine": "workspace:*",
     "mdast-util-to-hast": "^13.2.0",
     "shiki": "^1.24.2",
     "unist-util-visit": "^5.0.0"
   },
   "devDependencies": {
+    "@fontsource/encode-sans-semi-expanded": "^5.2.8",
+    "@fontsource/ibm-plex-sans": "^5.2.8",
+    "@fontsource/jetbrains-mono": "^5.2.8",
+    "@fontsource/vollkorn": "^5.2.10",
     "@types/katex": "^0.16.7",
     "@types/react": "^19.0.1",
     "@types/react-dom": "^19.0.2",

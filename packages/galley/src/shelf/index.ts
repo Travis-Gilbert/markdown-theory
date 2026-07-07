@@ -6,13 +6,7 @@
  * arrayAdapter (the base). Views: stream, archive, tag, thread.
  */
 
-export type {
-  ShelfAdapter,
-  ShelfEdge,
-  ShelfEdgeType,
-  ShelfItem,
-  ShelfScope,
-} from "./types.js";
+export type { ShelfAdapter, ShelfEdge, ShelfEdgeType, ShelfItem, ShelfScope } from "./types.js";
 
 export {
   arrayAdapter,

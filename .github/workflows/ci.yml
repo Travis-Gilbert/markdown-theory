@@ -27,7 +27,7 @@ jobs:
       - run: pnpm -r build
 
   visual:
-    name: G7 gates (overflow / contrast / widow)
+    name: G7 gates (overflow / contrast / widow / page-object / heading-binding)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -40,9 +40,13 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm exec playwright install --with-deps chromium
-      # Generate fixtures, then run the OS-independent gates. Pixel snapshots are
-      # a local check (baselines are committed per-OS); CI asserts computed
-      # geometry, contrast, and overflow, which are stable across platforms.
+      # Generate fixtures, then run the OS-independent gates as merge blockers.
+      # These assert computed geometry, contrast, overflow, that the page object
+      # is present (its background differs from the ground and content sits inset
+      # at every viewport), and the heading-binding ratio -- all stable across
+      # platforms. Reverting P1 (the page object) fails the page-object gate.
+      # Pixel snapshots stay a local check (baselines are committed per-OS);
+      # changing one requires a token/punch-item reference in the commit message.
       - run: pnpm demo:permutations && pnpm demo:readmes
       - run: pnpm exec playwright test --grep-invert snapshot
       - if: failure()

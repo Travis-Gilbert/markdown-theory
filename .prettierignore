@@ -1,0 +1,9 @@
+# Generated / vendored / binary -- not ours to format.
+dist/
+coverage/
+test-results/
+playwright-report/
+blob-report/
+pnpm-lock.yaml
+**/*.png
+**/gates.spec.ts-snapshots/

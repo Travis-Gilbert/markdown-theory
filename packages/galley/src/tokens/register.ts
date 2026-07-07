@@ -10,13 +10,7 @@
 import { apcaLc, oklchCss, wcagContrast } from "./color.js";
 import { buildDetailing } from "./detailing.js";
 import { buildPage } from "./page.js";
-import {
-  type Band,
-  buildPalette,
-  DEFAULT_TARGETS,
-  defaultBands,
-  type Targets,
-} from "./palette.js";
+import { type Band, buildPalette, DEFAULT_TARGETS, defaultBands, type Targets } from "./palette.js";
 import { buildRamp, buildRhythm, HEADING_LEADING, solveLeading } from "./scale.js";
 import {
   type Axes,
@@ -53,11 +47,20 @@ export interface GenerateOptions {
   fonts?: Partial<Register["fonts"]>;
 }
 
+// Font roles are just four CSS custom properties (`--gy-font-*`); these are the
+// defaults, and every one is overridable per instance via `generateRegister(axes,
+// { fonts })` or in CSS by setting the token. Vollkorn ships in `galley/fonts`
+// too, so switching the body back to a serif is a one-liner (see the README).
 const DEFAULT_FONTS: Register["fonts"] = {
-  prose: "'Vollkorn', Georgia, 'Times New Roman', serif",
+  prose: "'IBM Plex Sans', system-ui, sans-serif",
+  title: "'Encode Sans Semi Expanded', 'IBM Plex Sans', system-ui, sans-serif",
   ui: "'IBM Plex Sans', system-ui, sans-serif",
   mono: "'JetBrains Mono', ui-monospace, 'SF Mono', monospace",
 };
+
+/** A serif reading body (Vollkorn), the previous default. Pass as `fonts` to
+ * `generateRegister`, or spread into your own set, to opt back into a serif. */
+export const SERIF_PROSE = "'Vollkorn', Georgia, 'Times New Roman', serif";
 
 /** Fill a partial axis set from the defaults. */
 export function resolveAxes(partial: Partial<Axes> = {}): Axes {
@@ -125,10 +128,20 @@ export function generateRegister(
     ink2: oklchCss(solved.ink2),
     ink3: oklchCss(solved.ink3),
     hairline: solved.hairline,
+    tint: oklchCss(solved.tint),
     signal: oklchCss(solved.signal),
     signalPressed: oklchCss(solved.signalPressed),
     link: oklchCss(solved.link),
   };
+
+  // Inline code sits on the tint, not the surface. Receipt it so the AA claim
+  // covers the highlight too (the g7 rendered-contrast gate backstops it live).
+  report.push({
+    pair: "ink on tint",
+    wcag: round(wcagContrast(solved.ink, solved.tint), 3),
+    apcaLc: round(Math.abs(apcaLc(solved.ink, solved.tint)), 1),
+    passesAA: wcagContrast(solved.ink, solved.tint) >= 4.5,
+  });
 
   return {
     axes,
@@ -144,8 +157,7 @@ export function generateRegister(
   };
 }
 
-const clamp = (x: number, lo: number, hi: number): number =>
-  x < lo ? lo : x > hi ? hi : x;
+const clamp = (x: number, lo: number, hi: number): number => (x < lo ? lo : x > hi ? hi : x);
 
 function round(x: number, dp: number): number {
   const f = 10 ** dp;

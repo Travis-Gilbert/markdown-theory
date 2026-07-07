@@ -14,6 +14,5 @@
 
 ### And its subsection
 
-A single paragraph at the very end, to prove the heading ramp does not collapse
-and that spacing between adjacent headings stays rhythmic without body copy
-between them.
+A single paragraph at the very end, to prove the heading ramp does not collapse and that spacing
+between adjacent headings stays rhythmic without body copy between them.
