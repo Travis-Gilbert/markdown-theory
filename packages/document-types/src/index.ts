@@ -71,9 +71,7 @@ export function knownKinds(): string[] {
 /** Register a plugin descriptor (Tier 0). Collides loudly on an existing id. */
 export function register(descriptor: TypeDescriptor): void {
   if (registry.has(descriptor.id)) {
-    throw new Error(
-      `document-types: cannot register, id "${descriptor.id}" already exists`,
-    );
+    throw new Error(`document-types: cannot register, id "${descriptor.id}" already exists`);
   }
   assertValid(descriptor);
   registry.set(descriptor.id, descriptor);

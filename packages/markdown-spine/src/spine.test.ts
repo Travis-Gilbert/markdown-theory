@@ -55,7 +55,9 @@ describe("callout normalization (one component, many syntaxes)", () => {
       type: "callout",
       kind: "note",
     });
-    expect(firstWithSpine(parseMarkdown("> [!abstract]\n> x\n"))).toMatchObject({ type: "abstract" });
+    expect(firstWithSpine(parseMarkdown("> [!abstract]\n> x\n"))).toMatchObject({
+      type: "abstract",
+    });
   });
 
   it("strips the [!KIND] marker from the callout body text", () => {
@@ -71,7 +73,9 @@ describe("callout normalization (one component, many syntaxes)", () => {
 
 describe("directive vocabulary", () => {
   it("captures figure attributes and caption", () => {
-    const tree = parseMarkdown('::figure{src="chart.png" width="80%" align="center" caption="Fig 1"}\n');
+    const tree = parseMarkdown(
+      '::figure{src="chart.png" width="80%" align="center" caption="Fig 1"}\n',
+    );
     const spine = firstWithSpine(tree);
     expect(spine?.type).toBe("figure");
     expect(spine?.attributes).toMatchObject({ src: "chart.png", width: "80%", caption: "Fig 1" });
@@ -124,11 +128,7 @@ describe("plain-remark parity (annotation is additive)", () => {
       .use(remarkMath)
       .use(remarkDirective)
       .runSync(
-        unified()
-          .use(remarkParse)
-          .use(remarkFrontmatter, ["yaml"])
-          .use(remarkDirective)
-          .parse(md),
+        unified().use(remarkParse).use(remarkFrontmatter, ["yaml"]).use(remarkDirective).parse(md),
       ) as Root;
     expect(typeSkeleton(withSpine)).toEqual(typeSkeleton(plain));
     // ...but the spine tree carries the annotation the plain tree lacks.

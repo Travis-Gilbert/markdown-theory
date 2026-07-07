@@ -8,5 +8,5 @@ date: 2026-06-15
 
 # On computed proportion
 
-A long line needs more leading so the eye's return sweep lands on the right row.
-Tie leading to measure and the page tunes itself.
+A long line needs more leading so the eye's return sweep lands on the right row. Tie leading to
+measure and the page tunes itself.

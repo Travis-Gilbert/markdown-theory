@@ -1,7 +1,7 @@
 # raw-html
 
-Uncurated READMEs are full of raw HTML. It must be handled safely (dropped or
-neutralized), never break the layout or inject unstyled chrome.
+Uncurated READMEs are full of raw HTML. It must be handled safely (dropped or neutralized), never
+break the layout or inject unstyled chrome.
 
 <div align="center">
   <img src="https://example.com/logo.png" width="9999" alt="oversized logo" />

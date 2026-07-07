@@ -222,9 +222,7 @@
       "family": "procedure",
       "epistemic": "procedural",
       "okf_type": "Checklist",
-      "fields": [
-        { "key": "template_of", "required": false, "shape": "ref" }
-      ],
+      "fields": [{ "key": "template_of", "required": false, "shape": "ref" }],
       "headings": [],
       "recipe": { "base": "procedure", "deltas": {} },
       "margin": ["actions"],
@@ -248,9 +246,7 @@
       "family": "record",
       "epistemic": "record",
       "okf_type": "Log",
-      "fields": [
-        { "key": "scope", "required": false, "shape": "string" }
-      ],
+      "fields": [{ "key": "scope", "required": false, "shape": "string" }],
       "headings": [],
       "recipe": { "base": "record", "deltas": {} },
       "margin": ["history"],
@@ -392,9 +388,7 @@
       "family": "working",
       "epistemic": "generated",
       "okf_type": "Outline",
-      "fields": [
-        { "key": "expands_to", "required": false, "shape": "ref" }
-      ],
+      "fields": [{ "key": "expands_to", "required": false, "shape": "ref" }],
       "headings": [],
       "recipe": { "base": "working", "deltas": {} },
       "margin": ["suggestions", "questions"],
@@ -448,9 +442,7 @@
       "family": "structural",
       "epistemic": "generated",
       "okf_type": "Reading List",
-      "fields": [
-        { "key": "items", "required": false, "shape": "string[]" }
-      ],
+      "fields": [{ "key": "items", "required": false, "shape": "string[]" }],
       "headings": [],
       "recipe": { "base": "structural", "deltas": {} },
       "margin": ["suggestions"],
@@ -462,9 +454,7 @@
       "family": "structural",
       "epistemic": "generated",
       "okf_type": "Changelog",
-      "fields": [
-        { "key": "project_ref", "required": false, "shape": "ref" }
-      ],
+      "fields": [{ "key": "project_ref", "required": false, "shape": "ref" }],
       "headings": ["versioned entries"],
       "recipe": { "base": "structural", "deltas": {} },
       "margin": ["history"],

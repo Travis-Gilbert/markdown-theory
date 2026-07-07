@@ -33,7 +33,10 @@ export type SpineProcessor = ReturnType<typeof createProcessor>;
 const defaultProcessor = createProcessor();
 
 /** Parse markdown to a normalized mdast tree. */
-export function parseMarkdown(markdown: string, processor: SpineProcessor = defaultProcessor): Root {
+export function parseMarkdown(
+  markdown: string,
+  processor: SpineProcessor = defaultProcessor,
+): Root {
   const tree = processor.parse(markdown);
   return processor.runSync(tree) as Root;
 }

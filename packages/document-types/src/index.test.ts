@@ -72,9 +72,9 @@ describe("document-types registry (T1)", () => {
   });
 
   it("rejects a descriptor with an unknown rail module", () => {
-    expect(() =>
-      register(plugin({ id: "badpoem", margin: ["not_a_module"] as never })),
-    ).toThrow(/unknown rail module/);
+    expect(() => register(plugin({ id: "badpoem", margin: ["not_a_module"] as never }))).toThrow(
+      /unknown rail module/,
+    );
     expect(getType("badpoem")).toBeUndefined();
   });
 

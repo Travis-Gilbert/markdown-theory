@@ -9,24 +9,13 @@
 
 /** The six base render families. Family recipes carry the render load; type
  * descriptors only declare deltas over them. */
-export type Family =
-  | "prose"
-  | "reference"
-  | "procedure"
-  | "record"
-  | "working"
-  | "structural";
+export type Family = "prose" | "reference" | "procedure" | "record" | "working" | "structural";
 
 /** The cross-cutting epistemic class. Claim-bearing types feed the
  * contradiction machinery; procedural types license execution; records are
  * provenance-heavy and immutable-leaning; references anchor entities;
  * generated types are synthesized (index, changelog). */
-export type Epistemic =
-  | "claim_bearing"
-  | "procedural"
-  | "record"
-  | "reference"
-  | "generated";
+export type Epistemic = "claim_bearing" | "procedural" | "record" | "reference" | "generated";
 
 /** The fixed rail vocabulary (D4 extends). A descriptor's `margin` draws only
  * from this set; a module renders nothing when its data source is empty. */
