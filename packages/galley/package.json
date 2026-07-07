@@ -1,6 +1,6 @@
 {
   "name": "@travis-gilbert/markdown-theory",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A markdown renderer whose beauty is computed, not themed. MIT.",
   "license": "MIT",
   "author": "Travis Gilbert",
