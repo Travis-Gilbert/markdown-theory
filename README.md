@@ -1,15 +1,14 @@
 # markdown-theory
 
-**Computational beauty.** markdown-theory makes your files read like a personal website or blog
-rather than a pile of files: markdown to HTML, markdown to React, with output that is good by
-construction. MIT licensed. Published as
-[`@travis-gilbert/markdown-theory`](https://www.npmjs.com/package/@travis-gilbert/markdown-theory).
+**Computational beauty.** markdown-theory makes your files read like a personal
+website or blog rather than a pile of files: markdown to HTML, markdown to React,
+with output that is good by construction. MIT licensed. Published as
+[`@travisgilbert/markdown-theory`](https://www.npmjs.com/package/@travisgilbert/markdown-theory).
 
-A markdown renderer whose default output looks like a **publication, not a folder of files**,
-because beauty is _computed_, not themed. Point it at a markdown string, a directory, or a bundle
-and it renders a page that is good by construction, including content nobody stopped to style. It is
-a clean-room alternative to Quarkdown (GPL-3.0) and CodiMD (AGPL-3.0): those are visual references
-only, no code, no CSS, no ported themes.
+A markdown renderer whose default output looks like a **publication, not a folder
+of files**, because beauty is *computed*, not themed. Point it at a markdown
+string, a directory, or a bundle and it renders a page that is good by
+construction, including content nobody stopped to style. 
 
 ## The three claims
 
@@ -155,6 +154,6 @@ pnpm format        # prettier: printWidth 100, proseWrap always for markdown
 
 ## Provenance and naming
 
-MIT. markdown-theory was built under the working codename **galley** (the tray that holds set type
-before imposition: same set type, many pages); the internal package directory keeps that name.
-Visual references (Quarkdown, CodiMD) are named for provenance only; no code derives from them.
+MIT. markdown-theory was built under the working codename **galley** (the tray
+that holds set type before imposition: same set type, many pages); the internal
+package directory keeps that name. 
