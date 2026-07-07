@@ -1,0 +1,523 @@
+# Instincts generated from https://github.com/Travis-Gilbert/markdown-theory
+# Generated: 2026-07-07T02:49:44.486Z
+# Version: 2.0
+# NOTE: This file supplements (does not replace) any existing curated instincts.
+# High-confidence manually curated instincts should be preserved alongside these.
+
+---
+id: markdown-theory-commit-conventional
+trigger: "when writing a commit message"
+confidence: 0.85
+domain: git
+source: repo-analysis
+source_repo: https://github.com/Travis-Gilbert/markdown-theory
+---
+
+# Markdown Theory Commit Conventional
+
+## Action
+
+Use conventional commit format with prefixes: feat, refactor, chore
+
+## Evidence
+
+- 5 commits analyzed
+- Detected conventional commit pattern
+- Examples: feat(document-types): descriptor registry + TS reader (DOCUMENT-TYPES T1), refactor(scope): rescope to @travis-gilbert + Galley T2 family recipes
+
+---
+id: markdown-theory-commit-length
+trigger: "when writing a commit message"
+confidence: 0.6
+domain: git
+source: repo-analysis
+source_repo: https://github.com/Travis-Gilbert/markdown-theory
+---
+
+# Markdown Theory Commit Length
+
+## Action
+
+Write moderate-length commit messages (~71 characters)
+
+## Evidence
+
+- Average commit message length: 71 chars
+- Based on 5 commits
+
+---
+id: markdown-theory-naming-files
+trigger: "when creating a new file"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/Travis-Gilbert/markdown-theory
+---
+
+# Markdown Theory Naming Files
+
+## Action
+
+Use kebab-case naming convention
+
+## Evidence
+
+- Analyzed file naming patterns in repository
+- Dominant pattern: kebab-case
+
+---
+id: markdown-theory-import-relative
+trigger: "when importing modules"
+confidence: 0.75
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/Travis-Gilbert/markdown-theory
+---
+
+# Markdown Theory Import Relative
+
+## Action
+
+Use relative imports for project files
+
+## Evidence
+
+- Import analysis shows relative import pattern
+- Example: import { x } from '../lib/x'
+
+---
+id: markdown-theory-export-style
+trigger: "when exporting from a module"
+confidence: 0.7
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/Travis-Gilbert/markdown-theory
+---
+
+# Markdown Theory Export Style
+
+## Action
+
+Prefer named exports
+
+## Evidence
+
+- Export pattern analysis
+- Dominant style: named
+
+---
+id: markdown-theory-test-separate
+trigger: "when writing tests"
+confidence: 0.8
+domain: testing
+source: repo-analysis
+source_repo: https://github.com/Travis-Gilbert/markdown-theory
+---
+
+# Markdown Theory Test Separate
+
+## Action
+
+Place tests in the tests/ or __tests__/ directory, mirroring src structure
+
+## Evidence
+
+- Separate test directory pattern detected
+- Tests live in dedicated test folders
+
+---
+id: markdown-theory-test-framework
+trigger: "when writing tests"
+confidence: 0.9
+domain: testing
+source: repo-analysis
+source_repo: https://github.com/Travis-Gilbert/markdown-theory
+---
+
+# Markdown Theory Test Framework
+
+## Action
+
+Use vitest as the test framework
+
+## Evidence
+
+- Test framework detected: vitest
+- File pattern: *.test.ts
+
+---
+id: markdown-theory-test-naming
+trigger: "when creating a test file"
+confidence: 0.85
+domain: testing
+source: repo-analysis
+source_repo: https://github.com/Travis-Gilbert/markdown-theory
+---
+
+# Markdown Theory Test Naming
+
+## Action
+
+Name test files using the pattern: *.test.ts
+
+## Evidence
+
+- File pattern: *.test.ts
+- Consistent across test files
+
+---
+id: markdown-theory-workflow-add-or-enhance-document-type-or-recipe
+trigger: "when doing add or enhance document type or recipe"
+confidence: 0.6
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/Travis-Gilbert/markdown-theory
+---
+
+# Markdown Theory Workflow Add Or Enhance Document Type Or Recipe
+
+## Action
+
+Follow the add-or-enhance-document-type-or-recipe workflow:
+1. Edit or add to types.json (document type data)
+2. Update TypeScript schema/types (e.g., types.ts, recipes.ts)
+3. Update or add registry/reader logic (e.g., index.ts, resolveType, recipeFromDescriptor)
+4. Update or add tests for new types/recipes (e.g., index.test.ts, family.test.ts, fixture-matrix.test.tsx)
+5. Update package.json if new package or scope change
+6. Run typecheck and ensure all tests pass
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~2x per month
+- Files: packages/document-types/types.json, packages/document-types/src/types.ts, packages/document-types/src/index.ts
+
+---
+id: markdown-theory-workflow-css-and-style-token-extension-with-test-matrix
+trigger: "when doing css and style token extension with test matrix"
+confidence: 0.6
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/Travis-Gilbert/markdown-theory
+---
+
+# Markdown Theory Workflow Css And Style Token Extension With Test Matrix
+
+## Action
+
+Follow the css-and-style-token-extension-with-test-matrix workflow:
+1. Edit or add CSS for new/updated families (e.g., galley.css)
+2. Update or add style tokens/types if needed
+3. Update or add test fixture matrix to cover new styles (e.g., fixture-matrix.test.tsx)
+4. Run tests to verify all types/families render correctly
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~2x per month
+- Files: packages/galley/src/css/galley.css, packages/galley/src/templates/fixture-matrix.test.tsx, packages/galley/src/tokens/*.ts
+
+---
+id: markdown-theory-workflow-repo-wide-formatting-standardization
+trigger: "when doing repo wide formatting standardization"
+confidence: 0.55
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/Travis-Gilbert/markdown-theory
+---
+
+# Markdown Theory Workflow Repo Wide Formatting Standardization
+
+## Action
+
+Follow the repo-wide-formatting-standardization workflow:
+1. Add or update .prettierrc and .prettierignore
+2. Run Prettier across all relevant files (code, markdown, etc.)
+3. Commit all reflowed/auto-formatted files
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~1x per month
+- Files: .prettierrc, .prettierignore, Specs/*.md
+
+---
+id: markdown-theory-instinct-file-naming
+trigger: "When creating or renaming a file"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: Travis-Gilbert/markdown-theory
+---
+
+# Markdown Theory Instinct File Naming
+
+## Action
+
+Use kebab-case for file names
+
+## Evidence
+
+- Pattern in codeStyle.namingConventions.files
+- All files in packages/ use kebab-case
+
+---
+id: markdown-theory-instinct-function-naming
+trigger: "When defining a function"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: Travis-Gilbert/markdown-theory
+---
+
+# Markdown Theory Instinct Function Naming
+
+## Action
+
+Use camelCase for function names
+
+## Evidence
+
+- Pattern in codeStyle.namingConventions.functions
+- Functions in *.ts files follow camelCase
+
+---
+id: markdown-theory-instinct-class-naming
+trigger: "When defining a class"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: Travis-Gilbert/markdown-theory
+---
+
+# Markdown Theory Instinct Class Naming
+
+## Action
+
+Use PascalCase for class names
+
+## Evidence
+
+- Pattern in codeStyle.namingConventions.classes
+- Classes in *.ts files use PascalCase
+
+---
+id: markdown-theory-instinct-constant-naming
+trigger: "When declaring a constant"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: Travis-Gilbert/markdown-theory
+---
+
+# Markdown Theory Instinct Constant Naming
+
+## Action
+
+Use SCREAMING_SNAKE_CASE for constant names
+
+## Evidence
+
+- Pattern in codeStyle.namingConventions.constants
+- Constants in *.ts files use SCREAMING_SNAKE_CASE
+
+---
+id: markdown-theory-instinct-import-style
+trigger: "When importing modules"
+confidence: 0.85
+domain: code-style
+source: repo-analysis
+source_repo: Travis-Gilbert/markdown-theory
+---
+
+# Markdown Theory Instinct Import Style
+
+## Action
+
+Use relative import paths
+
+## Evidence
+
+- Pattern in codeStyle.importStyle
+- Imports in packages/**/*.ts are relative
+
+---
+id: markdown-theory-instinct-export-style
+trigger: "When exporting from a module"
+confidence: 0.85
+domain: code-style
+source: repo-analysis
+source_repo: Travis-Gilbert/markdown-theory
+---
+
+# Markdown Theory Instinct Export Style
+
+## Action
+
+Use named exports
+
+## Evidence
+
+- Pattern in codeStyle.exportStyle
+- Exports in packages/**/*.ts are named
+
+---
+id: markdown-theory-instinct-test-file-pattern
+trigger: "When creating a test file"
+confidence: 0.9
+domain: testing
+source: repo-analysis
+source_repo: Travis-Gilbert/markdown-theory
+---
+
+# Markdown Theory Instinct Test File Pattern
+
+## Action
+
+Name the file with a .test.ts suffix
+
+## Evidence
+
+- Pattern in testing.filePattern
+- Seen in packages/**/index.test.ts, family.test.ts, fixture-matrix.test.tsx
+
+---
+id: markdown-theory-instinct-test-framework
+trigger: "When writing tests"
+confidence: 0.9
+domain: testing
+source: repo-analysis
+source_repo: Travis-Gilbert/markdown-theory
+---
+
+# Markdown Theory Instinct Test Framework
+
+## Action
+
+Use Vitest as the testing framework
+
+## Evidence
+
+- Pattern in testing.framework
+- Test files import vitest
+
+---
+id: markdown-theory-instinct-test-type
+trigger: "When designing tests"
+confidence: 0.8
+domain: testing
+source: repo-analysis
+source_repo: Travis-Gilbert/markdown-theory
+---
+
+# Markdown Theory Instinct Test Type
+
+## Action
+
+Write unit tests for modules and logic
+
+## Evidence
+
+- Pattern in testing.testTypes
+- Test files focus on unit-level coverage
+
+---
+id: markdown-theory-instinct-commit-format
+trigger: "When making a git commit"
+confidence: 0.9
+domain: git
+source: repo-analysis
+source_repo: Travis-Gilbert/markdown-theory
+---
+
+# Markdown Theory Instinct Commit Format
+
+## Action
+
+Use Conventional Commits format with prefixes: feat, refactor, chore
+
+## Evidence
+
+- Pattern in commits.prefixes
+- Examples: 'feat(document-types): ...', 'refactor(scope): ...', 'chore(format): ...'
+
+---
+id: markdown-theory-instinct-commit-length
+trigger: "When writing a commit message"
+confidence: 0.7
+domain: git
+source: repo-analysis
+source_repo: Travis-Gilbert/markdown-theory
+---
+
+# Markdown Theory Instinct Commit Length
+
+## Action
+
+Keep the commit message around 70 characters on average
+
+## Evidence
+
+- Pattern in commits.averageLength
+- Examples show concise messages
+
+---
+id: markdown-theory-instinct-add-or-enhance-document-type
+trigger: "When adding a new document type, updating taxonomy, or enhancing recipe logic"
+confidence: 0.95
+domain: workflow
+source: repo-analysis
+source_repo: Travis-Gilbert/markdown-theory
+---
+
+# Markdown Theory Instinct Add Or Enhance Document Type
+
+## Action
+
+Edit types.json, update TypeScript types, update registry logic, add/modify tests, update package.json if needed, and run typecheck/tests
+
+## Evidence
+
+- Workflow: add-or-enhance-document-type-or-recipe
+- Commit sequences and files in workflow definition
+
+---
+id: markdown-theory-instinct-css-style-token-extension
+trigger: "When adding or updating style rules for document families/types"
+confidence: 0.9
+domain: workflow
+source: repo-analysis
+source_repo: Travis-Gilbert/markdown-theory
+---
+
+# Markdown Theory Instinct Css Style Token Extension
+
+## Action
+
+Edit galley.css, update/add style tokens, update test fixture matrix, and run tests
+
+## Evidence
+
+- Workflow: css-and-style-token-extension-with-test-matrix
+- Commit sequences and files in workflow definition
+
+---
+id: markdown-theory-instinct-formatting-standardization
+trigger: "When introducing or enforcing formatting rules repo-wide"
+confidence: 0.85
+domain: workflow
+source: repo-analysis
+source_repo: Travis-Gilbert/markdown-theory
+---
+
+# Markdown Theory Instinct Formatting Standardization
+
+## Action
+
+Add/update .prettierrc/.prettierignore, run Prettier, commit all formatted files
+
+## Evidence
+
+- Workflow: repo-wide-formatting-standardization
+- Commit sequences and files in workflow definition
+
