@@ -10,6 +10,14 @@
  * `pnpm lint:literals` enforces this.
  */
 
+/*
+ * The page object. `.galley` IS the page: a measure-bounded, centered sheet that
+ * sits on the host ground (the host paints `--gy-ground` on body/html; the page
+ * paints `--gy-surface`). The Van de Graaf canon is spent here -- the inline
+ * gutter and the asymmetric block pads (content optically high) come straight
+ * from the emitted `--gy-page-*` tokens. `.galley--bare` drops the page chrome
+ * for embedding hosts (Compose Read) that supply their own page geometry.
+ */
 .galley {
   color: var(--gy-ink);
   background: var(--gy-surface);
@@ -27,17 +35,40 @@
   overflow-wrap: break-word;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+
+  /* The canon, spent: a bounded, centered, elevated page. */
+  box-sizing: border-box;
+  max-inline-size: calc(var(--gy-measure) + 2 * var(--gy-page-pad-inline));
+  margin-inline: auto;
+  padding-inline: var(--gy-page-pad-inline);
+  padding-block: var(--gy-page-pad-block-start) var(--gy-page-pad-block-end);
+  border: var(--gy-page-border);
+  border-radius: var(--gy-radius);
+  box-shadow: var(--gy-shadow);
 }
 
 .galley * {
   box-sizing: border-box;
 }
 
-/* The page: measure-limited column, content optically high. */
-.galley-page {
-  max-width: var(--gy-measure);
-  margin-inline: auto;
-  padding-inline: var(--gy-space-4);
+/* Embedding opt-out: edge-to-edge, no page chrome, host owns the surface. */
+.galley--bare {
+  max-inline-size: none;
+  margin-inline: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+}
+
+/* Zero the default block margins so the owl below is the SOLE spacing authority.
+ * :where() keeps this at zero added specificity, so the owl and every per-element
+ * override (headings, figures, the title block) win over it. Without this, an
+ * element that resets its own margin (p, lists, blockquote) out-specifies the
+ * owl and collapses the gap to its neighbours -- see the block-spacing tests. */
+.galley :where(p, ul, ol, dl, blockquote, pre, table) {
+  margin: 0;
 }
 
 /* Vertical rhythm: the "owl" -- space between flow siblings, in lh. */
@@ -56,7 +87,11 @@
 }
 .galley h1 {
   font-size: var(--gy-text-h1);
-  margin-top: var(--gy-space-2);
+}
+/* A body h1 with no frontmatter masthead still opens with settled space: one
+ * full space-6 below the page's top pad, so the document never starts flush. */
+.galley > h1 {
+  margin-top: var(--gy-space-6);
 }
 .galley h2 {
   font-size: var(--gy-text-h2);
@@ -80,8 +115,11 @@
   color: var(--gy-ink-2);
 }
 
-.galley p {
-  margin: 0;
+/* Heading binding: a heading belongs to what follows it, so the gap after is
+ * smaller than the sectional gap before (the owl still spaces everything else).
+ * Beats the owl on specificity via the :is() type argument. */
+.galley :is(h2, h3, h4) + * {
+  margin-top: var(--gy-space-1);
 }
 
 /* Links */
@@ -102,7 +140,6 @@
 /* Lists */
 .galley :is(ul, ol) {
   padding-left: 1.3em;
-  margin: 0;
 }
 .galley li + li {
   margin-top: var(--gy-space-1);
@@ -129,7 +166,6 @@
 
 /* Blockquote (plain) */
 .galley blockquote {
-  margin: 0;
   padding-left: var(--gy-space-3);
   border-left: var(--gy-border-width) solid var(--gy-hairline);
   color: var(--gy-ink-2);
@@ -164,16 +200,21 @@
   font-size: 0.92em;
   font-feature-settings: var(--gy-feat-mono, "zero" 1);
 }
+/* Inline code reads as a highlighted run of text, not a chip: a tint, no
+ * border, the small radius, and NO vertical padding so the line rhythm never
+ * wobbles. box-decoration-break keeps the tint on both fragments when it wraps. */
 .galley :not(pre) > code {
-  background: var(--gy-ground);
-  border: var(--gy-border-width) solid var(--gy-hairline);
-  border-radius: var(--gy-radius);
-  padding: 0.1em 0.35em;
+  background: var(--gy-tint);
+  border: 0;
+  border-radius: var(--gy-radius-sm);
+  padding: 0 0.25em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
 }
 .galley pre {
   background: var(--gy-top);
   border: var(--gy-border-width) solid var(--gy-hairline);
-  border-radius: var(--gy-radius-lg);
+  border-radius: var(--gy-radius);
   padding: var(--gy-space-3);
   overflow-x: auto;
   font-size: var(--gy-text-small);
@@ -242,7 +283,10 @@
   border-radius: var(--gy-radius);
 }
 .galley-figure {
-  margin: 0;
+  /* A figure is its own object: a touch more air than prose rhythm, midway
+   * between the owl gap (space-3) and a full sectional step (space-4). */
+  margin-block: calc((var(--gy-space-3) + var(--gy-space-4)) / 2);
+  margin-inline: 0;
   text-align: center;
 }
 .galley-figure img {
@@ -263,12 +307,75 @@
   margin-top: var(--gy-space-1);
 }
 
+/* Full-bleed: break out of the measure to the page's inline padding edges. The
+ * frame and radius come off, since a bleed image meets the page edge; the
+ * caption is padded back so it still aligns with the reading column. */
+.galley-figure[data-width="bleed"] {
+  margin-inline: calc(-1 * var(--gy-page-pad-inline));
+  max-inline-size: none;
+}
+.galley-figure[data-width="bleed"] img {
+  width: 100%;
+  border: 0;
+  border-radius: 0;
+}
+.galley-figure[data-width="bleed"] .galley-figcaption {
+  padding-inline: var(--gy-page-pad-inline);
+}
+
+/* Two-up comparison (then/now). auto-fit + a ch-based min lets the panels stack
+ * on a narrow measure without a pixel breakpoint (the no-literals rule bans px
+ * and rem, so the responsive step rides `ch`). */
+.galley-compare-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20ch), 1fr));
+  gap: var(--gy-space-2);
+}
+.galley-compare-cell {
+  position: relative;
+}
+.galley-compare-cell img {
+  display: block;
+  width: 100%;
+  border: var(--gy-border-width) solid var(--gy-hairline);
+  border-radius: var(--gy-radius);
+}
+.galley-figure[data-width="bleed"] .galley-compare-cell img {
+  border: 0;
+  border-radius: 0;
+}
+.galley-compare-label {
+  position: absolute;
+  top: var(--gy-space-1);
+  inset-inline-start: var(--gy-space-1);
+  font-family: var(--gy-font-ui);
+  font-size: var(--gy-text-caption);
+  font-weight: 640;
+  letter-spacing: 0.02em;
+  color: var(--gy-surface);
+  background: var(--gy-ink);
+  padding: 0.15em 0.55em;
+  border-radius: var(--gy-radius-sm);
+}
+
 /* Abstract */
 .galley-abstract {
+  position: relative;
   max-width: 54ch;
   color: var(--gy-ink-2);
-  border-left: 0.12em solid var(--gy-hairline);
-  padding-left: var(--gy-space-3);
+  padding-left: var(--gy-space-2);
+}
+/* A short hairline rail that hugs the abstract text: inset from the block's top
+ * and (more so) its bottom, so it stops with the text instead of running the
+ * full height and grazing the paragraph below. */
+.galley-abstract::before {
+  content: "";
+  position: absolute;
+  inset-block: 0.3em 0.55em;
+  inset-inline-start: 0;
+  inline-size: 0.12em;
+  background: var(--gy-hairline);
+  border-radius: var(--gy-radius-sm);
 }
 .galley-abstract-label {
   display: block;
@@ -280,40 +387,35 @@
   margin-bottom: var(--gy-space-1);
 }
 
-/* Callouts */
+/* Callouts. Kind is carried by the label, never a colored rail: the box lifts
+ * one surface step with a full hairline perimeter, and the small-caps label
+ * takes the kind color. No border-left anywhere. */
 .galley-callout {
+  background: var(--gy-top);
   border: var(--gy-border-width) solid var(--gy-hairline);
-  border-left-width: 0.2em;
-  border-radius: var(--gy-radius);
+  border-radius: var(--gy-radius-sm);
   padding: var(--gy-space-2) var(--gy-space-3);
-  background: var(--gy-ground);
+  color: var(--gy-ink);
 }
 .galley-callout-label {
   font-family: var(--gy-font-ui);
-  font-size: var(--gy-text-caption);
-  font-weight: 680;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  font-size: var(--gy-text-small);
+  font-variant-caps: all-small-caps;
+  font-weight: 620;
+  letter-spacing: 0.02em;
   margin-bottom: var(--gy-space-1);
-  color: var(--gy-ink-2);
-}
-.galley-callout[data-kind="note"] {
-  border-left-color: var(--gy-link);
-}
-.galley-callout[data-kind="tip"] {
-  border-left-color: var(--gy-link);
-}
-.galley-callout[data-kind="warning"],
-.galley-callout[data-kind="danger"] {
-  border-left-color: var(--gy-signal);
+  color: var(--gy-link);
 }
 .galley-callout[data-kind="warning"] .galley-callout-label,
 .galley-callout[data-kind="danger"] .galley-callout-label {
   color: var(--gy-signal);
 }
 .galley-callout[data-kind="quote"] {
-  border-left-color: var(--gy-ink-3);
   font-style: italic;
+}
+.galley-callout[data-kind="quote"] .galley-callout-label {
+  color: var(--gy-ink-3);
+  font-style: normal;
 }
 
 /* Embed / view fallback + unknown-view chip */
@@ -383,6 +485,73 @@
   font-family: var(--gy-font-ui);
   font-size: var(--gy-text-small);
   color: var(--gy-ink-3);
+}
+
+/* Title block: the masthead the renderer composes from frontmatter (title, a
+ * ui-font meta line, a hairline rule, and the standfirst slot). The article
+ * recipe centers it; note and reference keep it start-aligned. */
+.galley-titleblock {
+  padding-bottom: var(--gy-space-2);
+  border-bottom: var(--gy-border-width) solid var(--gy-hairline);
+}
+.galley-titleblock[data-align="center"] {
+  text-align: center;
+}
+.galley-title {
+  font-family: var(--gy-font-title);
+  font-size: var(--gy-text-h1);
+  line-height: var(--gy-leading-heading);
+  font-weight: 640;
+  letter-spacing: -0.011em;
+  text-wrap: var(--gy-text-wrap-heading);
+  margin: 0;
+}
+.galley-titlemeta {
+  font-family: var(--gy-font-ui);
+  font-size: var(--gy-text-small);
+  color: var(--gy-ink-3);
+  margin-top: var(--gy-space-2);
+}
+/* The shared heading rule trims the box to cap+baseline, which would let the
+ * meta line ride up into the title's descenders. Restore the title's own box
+ * (higher specificity than `.galley :is(h1..h6)`) so the masthead breathes. */
+.galley-titleblock .galley-title {
+  text-box: normal;
+  /* Encode Sans Semi Expanded is a wide display sans: it wants its own weight
+   * and normal tracking, not the serif heading ramp's tightening. */
+  font-weight: 600;
+  letter-spacing: 0;
+}
+.galley-titleblock .galley-standfirst {
+  margin-top: var(--gy-space-2);
+}
+.galley-titleblock[data-align="center"] .galley-standfirst {
+  margin-inline: auto;
+  max-inline-size: 54ch;
+}
+
+/* ---- The paper kit (article recipe) ------------------------------------ */
+/*
+ * Two opt-in typeset moves. `galley-justify` justifies prose with hyphenation
+ * (on for the article recipe in print/typeset contexts, ragged elsewhere).
+ * `galley-booktabs` gives tables the booktabs grammar: horizontal rules only --
+ * a heavier top and bottom rule, a thin midrule under the header, no verticals,
+ * no per-row rules -- with numeric columns riding the GFM right alignment.
+ */
+.galley-justify p,
+.galley-justify li {
+  text-align: justify;
+  hyphens: auto;
+}
+.galley-booktabs table {
+  border-top: calc(2 * var(--gy-border-width)) solid var(--gy-ink-3);
+  border-bottom: calc(2 * var(--gy-border-width)) solid var(--gy-ink-3);
+}
+.galley-booktabs :is(th, td) {
+  border-bottom: 0;
+}
+.galley-booktabs thead th {
+  border-bottom: var(--gy-border-width) solid var(--gy-hairline);
 }
 
 /* Numbered headings via CSS counters. The article delta and the procedure and

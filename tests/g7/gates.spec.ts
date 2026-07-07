@@ -145,7 +145,9 @@ for (const f of contentFiles) {
           if (rgba && rgba[3] > 0) return rgba;
           n = n.parentElement;
         }
-        return parseRgb(getComputedStyle(document.documentElement).backgroundColor) || [255, 255, 255, 1];
+        return (
+          parseRgb(getComputedStyle(document.documentElement).backgroundColor) || [255, 255, 255, 1]
+        );
       }
       function hasOwnText(el) {
         return Array.from(el.childNodes).some(
@@ -221,6 +223,99 @@ for (const f of contentFiles) {
     });
 
     expect(findings, `widowed last lines:\n${JSON.stringify(findings, null, 2)}`).toEqual([]);
+  });
+}
+
+// ---- Gate 5: page object present (P8) ------------------------------------
+// The regression that shipped once (full-bleed flush-left prose) must fail CI.
+// A page is present when its background differs from the ground AND content sits
+// inset from the viewport edge -- at every viewport, so a phone counts too.
+for (const f of contentFiles) {
+  for (const width of [360, 768, 1280, 2560]) {
+    test(`page-object @${width}: ${f.label}`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto(urlOf(f.dir, f.file), { waitUntil: "load" });
+
+      const r = await page.evaluate(() => {
+        const galley = document.querySelector(".galley");
+        if (!galley) return { ok: false, why: "no .galley" };
+        const pageBg = getComputedStyle(galley).backgroundColor;
+        const groundBg = getComputedStyle(document.documentElement).backgroundColor;
+        // First child that actually renders text (skip the type-chip if any).
+        const content = Array.from(galley.children).find(
+          (el) => (el.textContent || "").trim().length > 0,
+        );
+        const left = content ? content.getBoundingClientRect().left : 0;
+        return { ok: true, pageBg, groundBg, left: Math.round(left) };
+      });
+
+      expect(r.ok, r.why).toBe(true);
+      expect(r.pageBg, "page background must differ from the ground").not.toBe(r.groundBg);
+      expect(r.left, "content must sit inset from the viewport edge").toBeGreaterThan(0);
+    });
+  }
+}
+
+// ---- Gate 6: heading binding ratio (P5/P8) -------------------------------
+// A heading belongs to what follows it: the gap above must be clearly larger
+// than the gap below (spec: at least 2x). Measured on rendered line boxes.
+for (const f of contentFiles) {
+  test(`heading-binding: ${f.label}`, async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto(urlOf(f.dir, f.file), { waitUntil: "load" });
+
+    const findings = await page.evaluate(() => {
+      const bad: Array<{ text: string; above: number; below: number }> = [];
+      document.querySelectorAll(".galley h2").forEach((h2) => {
+        const prev = h2.previousElementSibling;
+        const next = h2.nextElementSibling;
+        if (!prev || !next) return;
+        // Skip when the neighbour is itself a heading (no body gap to compare).
+        if (/^H[1-6]$/.test(prev.tagName) || /^H[1-6]$/.test(next.tagName)) return;
+        const hb = h2.getBoundingClientRect();
+        const above = Math.round(hb.top - prev.getBoundingClientRect().bottom);
+        const below = Math.round(next.getBoundingClientRect().top - hb.bottom);
+        if (below > 0 && above < 2 * below - 1) {
+          bad.push({ text: (h2.textContent || "").trim().slice(0, 40), above, below });
+        }
+      });
+      return bad;
+    });
+
+    expect(findings, `heading gap above < 2x below:\n${JSON.stringify(findings, null, 2)}`).toEqual(
+      [],
+    );
+  });
+}
+
+// ---- Gate 7: block spacing (the owl holds) -------------------------------
+// Every flow sibling after the first must have a real gap from the previous one.
+// A zero top margin means a per-element `margin: 0` reset out-specified the owl
+// and blocks collapsed together (paragraphs, lists, quotes touching).
+for (const f of contentFiles) {
+  test(`block-spacing: ${f.label}`, async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto(urlOf(f.dir, f.file), { waitUntil: "load" });
+
+    const findings = await page.evaluate(() => {
+      const bad: Array<{ tag: string; cls: string }> = [];
+      const galley = document.querySelector(".galley");
+      if (!galley) return bad;
+      const kids = Array.from(galley.children);
+      kids.forEach((el, i) => {
+        if (i === 0) return; // first child legitimately has no top margin
+        const mt = parseFloat(getComputedStyle(el).marginTop) || 0;
+        if (mt <= 0) {
+          bad.push({ tag: el.tagName.toLowerCase(), cls: el.className || "" });
+        }
+      });
+      return bad;
+    });
+
+    expect(
+      findings,
+      `flow blocks collapsed (0 top margin):\n${JSON.stringify(findings, null, 2)}`,
+    ).toEqual([]);
   });
 }
 

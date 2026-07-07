@@ -39,6 +39,18 @@ function round(x: number, dp: number): number {
   return Math.round(x * f) / f;
 }
 
+/**
+ * Blend `b` into `a` by fraction `t` in OKLCH (perceptual). Lightness and chroma
+ * interpolate linearly; hue takes the shortest arc so a blend never swings the
+ * long way round the wheel. Used for the inline-code tint (ink into surface).
+ */
+export function mixOklch(a: Oklch, b: Oklch, t: number): Oklch {
+  const k = t < 0 ? 0 : t > 1 ? 1 : t;
+  let dh = ((((b.h - a.h) % 360) + 540) % 360) - 180; // shortest signed arc [-180,180)
+  const h = (a.h + dh * k + 360) % 360;
+  return { l: a.l + (b.l - a.l) * k, c: a.c + (b.c - a.c) * k, h };
+}
+
 /** OKLCH -> linear-light sRGB (may fall outside [0,1] if out of gamut). */
 function oklchToLinearSrgb({ l, c, h }: Oklch): Rgb {
   const hr = (h * Math.PI) / 180;
@@ -64,9 +76,7 @@ function oklchToLinearSrgb({ l, c, h }: Oklch): Rgb {
 export function inGamut(color: Oklch): boolean {
   const { r, g, b } = oklchToLinearSrgb(color);
   const eps = 1e-4;
-  return (
-    r >= -eps && r <= 1 + eps && g >= -eps && g <= 1 + eps && b >= -eps && b <= 1 + eps
-  );
+  return r >= -eps && r <= 1 + eps && g >= -eps && g <= 1 + eps && b >= -eps && b <= 1 + eps;
 }
 
 function linearToGamma(c: number): number {
@@ -101,9 +111,7 @@ function wcagChannel(c: number): number {
 
 /** WCAG relative luminance of a gamma-sRGB triple. */
 function relativeLuminance({ r, g, b }: Rgb): number {
-  return (
-    0.2126 * wcagChannel(r) + 0.7152 * wcagChannel(g) + 0.0722 * wcagChannel(b)
-  );
+  return 0.2126 * wcagChannel(r) + 0.7152 * wcagChannel(g) + 0.0722 * wcagChannel(b);
 }
 
 /** WCAG contrast ratio between two OKLCH colors. Range [1, 21]. */

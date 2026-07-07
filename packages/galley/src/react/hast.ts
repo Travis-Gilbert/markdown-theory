@@ -50,14 +50,21 @@ function abstractHast(body: ElementContent[]): Element {
   ]);
 }
 
+/** `width="bleed"` (or page/full) is a mode, not a size: it breaks the figure
+ * out of the measure to the page edges. Any other width is a CSS inline-size. */
+function isBleed(width: string | null | undefined): boolean {
+  return width === "bleed" || width === "page" || width === "full";
+}
+
 function figureHast(attrs: Record<string, string>): Element {
+  const bleed = isBleed(attrs.width);
   const children: ElementContent[] = [
     h(
       "img",
       {
         src: attrs.src ?? "",
         alt: attrs.caption ?? attrs.alt ?? "",
-        style: attrs.width ? `inline-size:${attrs.width}` : undefined,
+        style: !bleed && attrs.width ? `inline-size:${attrs.width}` : undefined,
       },
       [],
     ),
@@ -65,7 +72,50 @@ function figureHast(attrs: Record<string, string>): Element {
   if (attrs.caption) {
     children.push(h("figcaption", { className: ["galley-figcaption"] }, [text(attrs.caption)]));
   }
-  return h("figure", { className: ["galley-figure"], dataAlign: attrs.align ?? "center" }, children);
+  return h(
+    "figure",
+    {
+      className: ["galley-figure"],
+      dataAlign: attrs.align ?? "center",
+      dataWidth: bleed ? "bleed" : undefined,
+    },
+    children,
+  );
+}
+
+/** A two-up comparison (then/now). Each panel carries a corner label; the whole
+ * figure can bleed to the page edges with `width="bleed"`. */
+function compareHast(attrs: Record<string, string | null | undefined>): Element {
+  const panels = [
+    { src: attrs.before, label: attrs.beforelabel ?? attrs.beforeLabel ?? "Then" },
+    { src: attrs.after, label: attrs.afterlabel ?? attrs.afterLabel ?? "Now" },
+  ].filter(
+    (p): p is { src: string; label: string } => typeof p.src === "string" && p.src.length > 0,
+  );
+
+  const grid = h(
+    "div",
+    { className: ["galley-compare-grid"] },
+    panels.map((p) =>
+      h("div", { className: ["galley-compare-cell"] }, [
+        h("img", { src: p.src, alt: p.label }, []),
+        h("span", { className: ["galley-compare-label"] }, [text(p.label)]),
+      ]),
+    ),
+  );
+
+  const children: ElementContent[] = [grid];
+  if (attrs.caption) {
+    children.push(h("figcaption", { className: ["galley-figcaption"] }, [text(attrs.caption)]));
+  }
+  return h(
+    "figure",
+    {
+      className: ["galley-figure", "galley-compare"],
+      dataWidth: isBleed(attrs.width) ? "bleed" : undefined,
+    },
+    children,
+  );
 }
 
 function embedHast(spine: SpineAnnotation, inline: boolean, body: ElementContent[]): Element {
@@ -84,6 +134,11 @@ function directiveHandler(state: State, node: DirectiveNode): Element {
   const spine = spineOf(node);
   const inline = node.type === "textDirective";
   const body = state.all(node as never) as ElementContent[];
+  // A presentation directive galley owns directly (the spine has no `compare`
+  // type; it is a layout, not a normalized content kind).
+  if (!inline && node.name === "compare") {
+    return compareHast(node.attributes ?? {});
+  }
   if (!spine) {
     return h(inline ? "span" : "div", {}, body);
   }
@@ -114,8 +169,10 @@ export function toGalleyHast(tree: MdRoot): HastRoot {
     textDirective: directiveHandler,
     blockquote(state: State, node: { data?: { spine?: SpineAnnotation } }) {
       const spine = spineOf(node);
-      if (spine?.type === "callout") return calloutHast(spine, state.all(node as never) as ElementContent[]);
-      if (spine?.type === "abstract") return abstractHast(state.all(node as never) as ElementContent[]);
+      if (spine?.type === "callout")
+        return calloutHast(spine, state.all(node as never) as ElementContent[]);
+      if (spine?.type === "abstract")
+        return abstractHast(state.all(node as never) as ElementContent[]);
       return defaultHandlers.blockquote(state, node as never);
     },
     inlineMath(_state: State, node: { value: string }) {

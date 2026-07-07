@@ -12,12 +12,7 @@ import { getType } from "@travis-gilbert/document-types";
 import type { TypeDescriptor } from "@travis-gilbert/document-types";
 
 export type RecipeFamily =
-  | "prose"
-  | "reference"
-  | "procedure"
-  | "record"
-  | "working"
-  | "structural";
+  "prose" | "reference" | "procedure" | "record" | "working" | "structural";
 
 export interface RecipeApparatus {
   /** Note: the gist rendered as a standfirst line under the title. */
@@ -42,6 +37,11 @@ export interface Recipe {
   numberedHeadings: boolean;
   /** Persistent table of contents from the heading tree. */
   toc: boolean;
+  /**
+   * The paper kit: booktabs tables always, plus justified prose in print/typeset
+   * contexts. Carried by the prose/article family; ragged-right everywhere else.
+   */
+  paperKit?: boolean;
   apparatus: RecipeApparatus;
 }
 
@@ -52,6 +52,7 @@ export const ARTICLE: Recipe = {
   rampOffset: 0,
   numberedHeadings: false,
   toc: false,
+  paperKit: true,
   apparatus: { authorLine: true },
 };
 
@@ -124,6 +125,7 @@ export const FAMILY_PROSE: Recipe = {
   rampOffset: 0,
   numberedHeadings: false,
   toc: false,
+  paperKit: true,
   apparatus: { standfirst: true },
 };
 
@@ -206,6 +208,7 @@ export function recipeFromDescriptor(descriptor: TypeDescriptor): Recipe {
     numberedHeadings:
       typeof deltas.numbered === "boolean" ? deltas.numbered : base.numberedHeadings,
     toc: typeof deltas.toc === "boolean" ? deltas.toc : base.toc,
+    paperKit: base.paperKit,
     apparatus: { ...base.apparatus, ...(isApparatus(deltas.apparatus) ? deltas.apparatus : {}) },
   };
 }

@@ -12,13 +12,7 @@ interface HastNode {
   properties?: Record<string, unknown>;
 }
 
-export function Embed({
-  node,
-  children,
-}: {
-  node?: HastNode;
-  children?: ReactNode;
-}): ReactElement {
+export function Embed({ node, children }: { node?: HastNode; children?: ReactNode }): ReactElement {
   const { views } = useGalley();
   const view = String(node?.properties?.dataView ?? "view");
   const inline = node?.properties?.dataInline === "true";

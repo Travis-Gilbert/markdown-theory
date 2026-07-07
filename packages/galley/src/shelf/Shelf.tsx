@@ -18,10 +18,7 @@ export interface ShelfProps {
   className?: string;
 }
 
-const MONTHS = [
-  "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
-];
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 function parts(iso: string | undefined): { y: string; m: number; d: number } | undefined {
   const m = iso?.match(/^(\d{4})-(\d{2})-(\d{2})/);

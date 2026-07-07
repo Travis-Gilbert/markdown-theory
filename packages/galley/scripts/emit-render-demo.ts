@@ -13,6 +13,7 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { emitCss, parchment } from "../src/tokens/index.js";
 import { createGalleyHighlighter, Galley } from "../src/react/index.js";
+import { inlineFontFaceCss } from "./fonts.js";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const require = createRequire(import.meta.url);
@@ -21,10 +22,11 @@ mkdirSync(outDir, { recursive: true });
 
 const doc = `---
 type: article
-title: Beauty is computed
+title: Beauty is computed, not themed
+byline: The Galley Review
+date: 2026-07-06
+gist: A page parsed by the spine, projected to React, styled entirely by computed tokens.
 ---
-
-# Beauty is computed, not themed
 
 :::abstract
 This page was rendered by \`<Galley>\`: markdown parsed by the spine, projected
@@ -77,13 +79,12 @@ A live ledger would render here in a host; standalone shows this fallback.
 
 const register = parchment();
 const highlighter = await createGalleyHighlighter(register, ["ts"]);
-const body = renderToStaticMarkup(
-  createElement(Galley, { doc, register, highlighter }),
-);
+const body = renderToStaticMarkup(createElement(Galley, { doc, register, highlighter }));
 
 const galleyCss = readFileSync(resolve(here, "../src/css/galley.css"), "utf8");
 const katexCss = readFileSync(require.resolve("katex/dist/katex.min.css"), "utf8");
 const tokensCss = emitCss(register, ":root");
+const fontCss = inlineFontFaceCss();
 
 const html = `<!doctype html>
 <html lang="en">
@@ -91,13 +92,14 @@ const html = `<!doctype html>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>galley &middot; rendered by &lt;Galley&gt;</title>
+<style>${fontCss}</style>
 <style>${tokensCss}</style>
 <style>${katexCss}</style>
 <style>${galleyCss}</style>
 <style>
+  /* Host rule: paint the ground; the page (.galley) paints its own surface. */
   html { background: var(--gy-ground); }
   body { margin: 0; padding: 4vh 0 12vh; }
-  .galley { max-width: var(--gy-measure); margin-inline: auto; padding-inline: clamp(1rem, 5vw, 2rem); }
 </style>
 </head>
 <body>

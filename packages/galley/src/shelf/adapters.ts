@@ -109,10 +109,7 @@ export interface TheoremMemoryDoc {
   body?: string;
 }
 
-export function theoremAdapter(
-  docs: TheoremMemoryDoc[],
-  edges: ShelfEdge[] = [],
-): ShelfAdapter {
+export function theoremAdapter(docs: TheoremMemoryDoc[], edges: ShelfEdge[] = []): ShelfAdapter {
   const items: ShelfItem[] = docs.map((d) => ({
     id: d.id,
     title: d.title ?? d.id,

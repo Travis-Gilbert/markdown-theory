@@ -47,7 +47,9 @@ function authorOf(fm: Record<string, unknown>): string | undefined {
   return (
     str(fm.byline) ??
     str(fm.author) ??
-    (Array.isArray(fm.authors) ? fm.authors.filter((a) => typeof a === "string").join(", ") : undefined)
+    (Array.isArray(fm.authors)
+      ? fm.authors.filter((a) => typeof a === "string").join(", ")
+      : undefined)
   );
 }
 
@@ -84,18 +86,36 @@ export function Galley({
     passNode: true,
   });
 
-  const style = register
-    ? (emitRegisterVars(register) as unknown as CSSProperties)
-    : undefined;
-  const cls = ["galley", hasType ? recipe.className : "", className]
+  const style = register ? (emitRegisterVars(register) as unknown as CSSProperties) : undefined;
+
+  // The paper kit rides the prose/article family: booktabs tables always, plus
+  // justified prose in a print/typeset context (register in print mode, or an
+  // explicit `justify: true`). Ragged-right stays the default everywhere else.
+  const paperKit = hasType && recipe.paperKit === true;
+  const justify = paperKit && (register?.axes.mode === "print" || frontmatter.justify === true);
+  const cls = [
+    "galley",
+    hasType ? recipe.className : "",
+    paperKit ? "galley-booktabs" : "",
+    justify ? "galley-justify" : "",
+    className,
+  ]
     .filter(Boolean)
     .join(" ");
 
-  const gist =
-    hasType && recipe.apparatus.standfirst
-      ? (str(frontmatter.gist) ?? str(frontmatter.description) ?? str(frontmatter.standfirst))
-      : undefined;
-  const author = hasType && recipe.apparatus.authorLine ? authorOf(frontmatter) : undefined;
+  // Masthead: when frontmatter carries a title, compose it into a title block
+  // (the recipe family decides centered vs start-aligned). Otherwise fall back
+  // to the loose apparatus lines the recipe asks for.
+  const title = str(frontmatter.title);
+  const dateStr = str(frontmatter.date);
+  const mastheadAuthor = authorOf(frontmatter);
+  const mastheadGist =
+    str(frontmatter.gist) ?? str(frontmatter.description) ?? str(frontmatter.standfirst);
+  const centered = recipe.family === "prose";
+  const meta = [mastheadAuthor, dateStr].filter(Boolean).join(" · ");
+
+  const looseGist = !title && hasType && recipe.apparatus.standfirst ? mastheadGist : undefined;
+  const looseAuthor = !title && hasType && recipe.apparatus.authorLine ? mastheadAuthor : undefined;
   const numbered = hasType && recipe.numberedHeadings ? "true" : undefined;
   const showToc = hasType && recipe.toc;
 
@@ -103,8 +123,15 @@ export function Galley({
     <GalleyContext.Provider value={{ highlighter, themeName: "galley", views }}>
       <div className={cls} style={style} data-numbered={numbered}>
         {unknown ? <div className="galley-typechip">{`type: ${requested} → article`}</div> : null}
-        {gist ? <p className="galley-standfirst">{gist}</p> : null}
-        {author ? <p className="galley-authorline">{author}</p> : null}
+        {title ? (
+          <header className="galley-titleblock" data-align={centered ? "center" : "start"}>
+            <h1 className="galley-title">{title}</h1>
+            {meta ? <p className="galley-titlemeta">{meta}</p> : null}
+            {mastheadGist ? <p className="galley-standfirst">{mastheadGist}</p> : null}
+          </header>
+        ) : null}
+        {looseGist ? <p className="galley-standfirst">{looseGist}</p> : null}
+        {looseAuthor ? <p className="galley-authorline">{looseAuthor}</p> : null}
         {showToc ? <Toc entries={tocFromHast(hast)} /> : null}
         {rendered}
       </div>

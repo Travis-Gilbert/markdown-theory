@@ -47,6 +47,35 @@ describe("spine components", () => {
     expect(html).toContain('class="galley-figure"');
     expect(html).toContain('src="chart.png"');
     expect(html).toContain("Fig 1");
+    // A numeric width becomes an inline-size on the image.
+    expect(html).toContain("inline-size:80%");
+  });
+
+  it("marks a bleed figure with data-width (a mode, not an image size)", () => {
+    const html = render('::figure{src="hero.png" width="bleed" caption="Hero"}');
+    expect(html).toContain('data-width="bleed"');
+    expect(html).toContain('src="hero.png"');
+    expect(html).not.toContain("inline-size:bleed");
+  });
+
+  it("renders a then/now compare with two labeled panels", () => {
+    const html = render('::compare{before="a.png" after="b.png" caption="T/N"}');
+    expect(html).toContain('class="galley-figure galley-compare"');
+    expect(html).toContain('class="galley-compare-grid"');
+    expect(html).toContain('src="a.png"');
+    expect(html).toContain('src="b.png"');
+    expect(html).toContain(">Then<");
+    expect(html).toContain(">Now<");
+    expect(html).toContain("T/N");
+  });
+
+  it("honors custom compare labels and the bleed width", () => {
+    const html = render(
+      '::compare{before="a.png" after="b.png" beforelabel="1920" afterlabel="Today" width="bleed"}',
+    );
+    expect(html).toContain(">1920<");
+    expect(html).toContain(">Today<");
+    expect(html).toContain('data-width="bleed"');
   });
 
   it("renders an unknown embed as fallback body plus a quiet chip", () => {

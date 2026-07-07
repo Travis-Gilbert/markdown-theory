@@ -28,5 +28,6 @@ export default defineConfig({
   },
   async onSuccess() {
     copyFileSync("src/css/galley.css", "dist/galley.css");
+    copyFileSync("src/css/fonts.css", "dist/fonts.css");
   },
 });

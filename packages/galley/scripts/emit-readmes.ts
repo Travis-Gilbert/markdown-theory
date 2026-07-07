@@ -15,6 +15,7 @@ import { fileURLToPath } from "node:url";
 import { emitCss, parchment, print, substrate } from "../src/tokens/index.js";
 import type { Register } from "../src/tokens/index.js";
 import { Galley } from "../src/react/index.js";
+import { inlineFontFaceCss } from "./fonts.js";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const readmeDir = resolve(here, "../fixtures/readmes");
@@ -28,6 +29,7 @@ const REGISTERS: Array<[string, Register]> = [
 ];
 
 const galleyCss = readFileSync(resolve(here, "../src/css/galley.css"), "utf8");
+const fontCss = inlineFontFaceCss();
 
 const readmes = readdirSync(readmeDir)
   .filter((f) => f.endsWith(".md"))
@@ -44,9 +46,10 @@ for (const file of readmes) {
 <html lang="en"><head><meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>${regName} / ${slug}</title>
+<style>${fontCss}</style>
 <style>${emitCss(register, ":root")}</style>
 <style>${galleyCss}</style>
-<style>html{background:var(--gy-ground)} body{margin:0;padding:4vh 0} .galley{max-width:var(--gy-measure);margin-inline:auto;padding-inline:clamp(1rem,5vw,2rem)}</style>
+<style>html{background:var(--gy-ground)} body{margin:0;padding:4vh 0 12vh}</style>
 </head><body>${body}</body></html>
 `;
     writeFileSync(resolve(outDir, name), html, "utf8");

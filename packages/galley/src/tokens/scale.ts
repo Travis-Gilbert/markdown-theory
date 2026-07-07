@@ -14,8 +14,7 @@ export function quarterPixel(px: number): number {
   return Math.round(px * 4) / 4;
 }
 
-const clamp = (x: number, lo: number, hi: number): number =>
-  x < lo ? lo : x > hi ? hi : x;
+const clamp = (x: number, lo: number, hi: number): number => (x < lo ? lo : x > hi ? hi : x);
 
 /**
  * Solve body leading for a given size against the active measure.

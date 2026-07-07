@@ -13,7 +13,7 @@
  * ships a page that fails AA.
  */
 
-import { inGamut, type Oklch, wcagContrast } from "./color.js";
+import { inGamut, mixOklch, type Oklch, wcagContrast } from "./color.js";
 import type { Axes, Mode } from "./types.js";
 
 export interface Band {
@@ -80,6 +80,8 @@ export interface SolvedPalette {
   ink: Oklch;
   ink2: Oklch;
   ink3: Oklch;
+  /** Inline-code highlight: ink blended a few percent into surface. */
+  tint: Oklch;
   signal: Oklch;
   signalPressed: Oklch;
   link: Oklch;
@@ -208,8 +210,14 @@ export function buildPalette(
     signalPressed = { ...signalPressed, c: axes.signalChroma * 0.85 };
   }
 
-  const hairline =
-    axes.mode === "dark" ? "rgba(255, 255, 255, 0.12)" : "rgba(20, 20, 19, 0.10)";
+  const hairline = axes.mode === "dark" ? "rgba(255, 255, 255, 0.12)" : "rgba(20, 20, 19, 0.10)";
+
+  // Inline-code highlight: ink blended 7% into surface. A tint, not a chip -- it
+  // reads as a highlighted run of text (light: a touch darker than surface;
+  // dark: a touch lighter), and stays well clear of AA because it is barely off
+  // the reading plane. Gamut-guarded like every other emitted color.
+  let tintColor = mixOklch(surface, ink, 0.07);
+  if (!inGamut(tintColor)) tintColor = { ...tintColor, c: tintColor.c * 0.85 };
 
   return {
     ground,
@@ -218,6 +226,7 @@ export function buildPalette(
     ink,
     ink2,
     ink3,
+    tint: tintColor,
     signal,
     signalPressed,
     link,
