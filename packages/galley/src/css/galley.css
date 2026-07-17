@@ -74,7 +74,7 @@
 /* Vertical rhythm: the "owl" -- space between flow siblings, in lh. */
 .galley > * + *,
 .galley-flow > * + * {
-  margin-top: var(--gy-space-3);
+  margin-top: var(--gy-space-flow, var(--gy-space-3));
 }
 
 /* Headings */
@@ -93,17 +93,21 @@
 .galley > h1 {
   margin-top: var(--gy-space-6);
 }
+/* Heading air above is ratio-derived per register (M3): the flow gap compounded
+ * one ratio step past the heading's ramp step, so display spacing rides the
+ * same axis as the type. The legacy scale steps stand in as fallbacks when the
+ * token sheet predates the heading-rhythm tokens. */
 .galley h2 {
   font-size: var(--gy-text-h2);
-  margin-top: var(--gy-space-5);
+  margin-top: var(--gy-space-above-h2, var(--gy-space-5));
 }
 .galley h3 {
   font-size: var(--gy-text-h3);
-  margin-top: var(--gy-space-4);
+  margin-top: var(--gy-space-above-h3, var(--gy-space-4));
 }
 .galley h4 {
   font-size: var(--gy-text-h4);
-  margin-top: var(--gy-space-4);
+  margin-top: var(--gy-space-above-h4, var(--gy-space-4));
 }
 .galley h5 {
   font-size: var(--gy-text-h5);
@@ -119,7 +123,7 @@
  * smaller than the sectional gap before (the owl still spaces everything else).
  * Beats the owl on specificity via the :is() type argument. */
 .galley :is(h2, h3, h4) + * {
-  margin-top: var(--gy-space-1);
+  margin-top: var(--gy-space-below-heading, var(--gy-space-1));
 }
 
 /* Links */
@@ -283,9 +287,10 @@
   border-radius: var(--gy-radius);
 }
 .galley-figure {
-  /* A figure is its own object: a touch more air than prose rhythm, midway
-   * between the owl gap (space-3) and a full sectional step (space-4). */
-  margin-block: calc((var(--gy-space-3) + var(--gy-space-4)) / 2);
+  /* A figure is its own object: one ratio step more air than the flow gap
+   * (M3), on the same scale step the headings ride. The legacy midpoint of
+   * space-3 and space-4 stands in for older token sheets. */
+  margin-block: var(--gy-space-figure, calc((var(--gy-space-3) + var(--gy-space-4)) / 2));
   margin-inline: 0;
   text-align: center;
 }

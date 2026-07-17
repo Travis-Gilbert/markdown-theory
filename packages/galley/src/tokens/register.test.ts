@@ -161,6 +161,47 @@ describe("page object + shape tokens (HANDOFF-GALLEY-PAGE P1/P3/P4)", () => {
   });
 });
 
+describe("heading rhythm at reading-pane scale (M3)", () => {
+  it("derives heading air from the type ratio, ordered h2 > h3 > h4 > flow", () => {
+    const hr = generateRegister({ ratio: RATIOS.minorThird }).rhythm.heading;
+    // flow * ratio^(step+1): h2 rides ramp step 3, h3 step 2, h4 step 1.
+    expect(hr.aboveLh.h2).toBeCloseTo(1.2 ** 4, 2);
+    expect(hr.aboveLh.h3).toBeCloseTo(1.2 ** 3, 2);
+    expect(hr.aboveLh.h4).toBeCloseTo(1.2 ** 2, 2);
+    expect(hr.aboveLh.h2).toBeGreaterThan(hr.aboveLh.h3);
+    expect(hr.aboveLh.h3).toBeGreaterThan(hr.aboveLh.h4);
+    expect(hr.aboveLh.h4).toBeGreaterThan(1);
+  });
+
+  it("a wider ramp earns more sectional air, capped at the sectional maximum", () => {
+    const minor = generateRegister({ ratio: RATIOS.minorThird }).rhythm.heading;
+    const golden = generateRegister({ ratio: RATIOS.goldenSection }).rhythm.heading;
+    expect(golden.aboveLh.h2).toBeGreaterThanOrEqual(minor.aboveLh.h2);
+    expect(golden.aboveLh.h2).toBeLessThanOrEqual(3);
+  });
+
+  it("binds a heading to its paragraph: the gap below stays the rhythm unit", () => {
+    const reg = generateRegister({ ratio: RATIOS.goldenSection });
+    expect(reg.rhythm.heading.belowLh).toBe(reg.rhythm.unitLh);
+    expect(reg.rhythm.heading.belowLh).toBeLessThan(reg.rhythm.heading.aboveLh.h2 / 2);
+  });
+
+  it("figures ride the same scale: one ratio step past the flow gap", () => {
+    const hr = generateRegister({ ratio: RATIOS.minorThird }).rhythm.heading;
+    expect(hr.figureLh).toBeCloseTo(1.2, 2);
+  });
+
+  it("emits the heading rhythm as fixture-level tokens, never a consumer override", () => {
+    const vars = emitRegisterVars(generateRegister());
+    expect(vars["--gy-space-flow"]).toBe("var(--gy-space-3)");
+    expect(vars["--gy-space-above-h2"]).toMatch(/lh$/);
+    expect(vars["--gy-space-above-h3"]).toMatch(/lh$/);
+    expect(vars["--gy-space-above-h4"]).toMatch(/lh$/);
+    expect(vars["--gy-space-below-heading"]).toMatch(/lh$/);
+    expect(vars["--gy-space-figure"]).toMatch(/lh$/);
+  });
+});
+
 describe("shiki theme from the register", () => {
   it("produces a parseable theme with hex token colors", () => {
     const theme = buildShikiTheme(parchment());

@@ -1,0 +1,85 @@
+/*
+ * console-dark-sans -- a generated register artifact. DO NOT EDIT BY HAND.
+ *
+ * Pinned output of the markdown-theory proportion engine; regenerate with
+ * `pnpm emit:fixtures` after changing the seed in src/tokens/fixtures.ts.
+ * Seed axes: {"base":16,"ratio":1.2,"measure":72,"hue":250,"chroma":0.008,"signalHue":26,"signalChroma":0.11,"linkHue":216,"linkChroma":0.08,"mode":"dark","density":"reading"}
+ * Seed fonts: {"title":"'Vollkorn', Georgia, 'Times New Roman', serif"}
+ *
+ * Bridge points for an embedding host (the official console contract):
+ *   --gy-surface   the reading plane the host maps its pane onto
+ *   --gy-ground    the canvas the host paints behind the plane
+ *   --gy-font-mono the code face shared with the host terminal
+ */
+:root {
+  --gy-size-n2: 0.6875rem;
+  --gy-size-n1: 0.8281rem;
+  --gy-size-0: 1rem;
+  --gy-size-1: 1.2031rem;
+  --gy-size-2: 1.4375rem;
+  --gy-size-3: 1.7344rem;
+  --gy-size-4: 2.0781rem;
+  --gy-size-5: 2.4844rem;
+  --gy-text-body: var(--gy-size-0);
+  --gy-text-small: var(--gy-size-n1);
+  --gy-text-caption: var(--gy-size-n2);
+  --gy-text-h1: var(--gy-size-4);
+  --gy-text-h2: var(--gy-size-3);
+  --gy-text-h3: var(--gy-size-2);
+  --gy-text-h4: var(--gy-size-1);
+  --gy-text-h5: var(--gy-size-0);
+  --gy-text-h6: var(--gy-size-n1);
+  --gy-leading-body: 1.497;
+  --gy-leading-heading: 1.15;
+  --gy-measure: 72ch;
+  --gy-space-unit: 0.5lh;
+  --gy-space-1: 0.5lh;
+  --gy-space-2: 0.75lh;
+  --gy-space-3: 1lh;
+  --gy-space-4: 1.5lh;
+  --gy-space-5: 2lh;
+  --gy-space-6: 3lh;
+  --gy-rhythm-px: 23.952px;
+  --gy-space-flow: var(--gy-space-3);
+  --gy-space-above-h2: 2.07lh;
+  --gy-space-above-h3: 1.73lh;
+  --gy-space-above-h4: 1.44lh;
+  --gy-space-below-heading: 0.5lh;
+  --gy-space-figure: 1.2lh;
+  --gy-page-margin-top: 0.2;
+  --gy-page-margin-bottom: 0.4;
+  --gy-page-margin-inner: 0.1333;
+  --gy-page-margin-outer: 0.2667;
+  --gy-page-pad-inline: clamp(36px, 6.67vw, 96px);
+  --gy-page-pad-block-start: 57px;
+  --gy-page-pad-block-end: 115px;
+  --gy-page-border: none;
+  --gy-shadow: none;
+  --gy-radius-sm: 3px;
+  --gy-radius: 7px;
+  --gy-radius-lg: 14px;
+  --gy-border-width: 1px;
+  --gy-ground: oklch(16.5% 0.008 250);
+  --gy-surface: oklch(20% 0.008 250);
+  --gy-top: oklch(24.5% 0.008 250);
+  --gy-ink: oklch(79.5% 0.012 250);
+  --gy-ink-2: oklch(70.75% 0.012 250);
+  --gy-ink-3: oklch(62% 0.012 250);
+  --gy-hairline: rgba(255, 255, 255, 0.12);
+  --gy-tint: oklch(24.165% 0.0083 250);
+  --gy-signal: oklch(63.75% 0.11 26);
+  --gy-signal-pressed: oklch(69.75% 0.11 26);
+  --gy-link: oklch(61.75% 0.08 216);
+  --gy-font-prose: 'IBM Plex Sans', system-ui, sans-serif;
+  --gy-font-title: 'Vollkorn', Georgia, 'Times New Roman', serif;
+  --gy-font-ui: 'IBM Plex Sans', system-ui, sans-serif;
+  --gy-font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
+  --gy-feat-prose: 'kern' 1, 'liga' 1, 'calt' 1, 'onum' 1;
+  --gy-feat-ui: 'kern' 1, 'liga' 1, 'calt' 1;
+  --gy-feat-tabular: 'kern' 1, 'tnum' 1, 'lnum' 1;
+  --gy-text-wrap-body: pretty;
+  --gy-text-wrap-heading: balance;
+  --gy-hanging-punctuation: first last;
+  --gy-hyphens: manual;
+  --gy-optical-sizing: auto;
+}

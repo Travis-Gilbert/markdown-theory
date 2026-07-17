@@ -14,12 +14,14 @@
     "lint:literals": "node scripts/lint-literals.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "emit:fixtures": "tsx packages/galley/scripts/emit-fixture-css.ts",
     "demo:tokens": "tsx packages/galley/scripts/emit-demo.ts",
     "demo:render": "tsx packages/galley/scripts/emit-render-demo.ts",
     "demo:shelf": "tsx packages/galley/scripts/emit-shelf-demo.ts",
     "demo:permutations": "tsx packages/galley/scripts/emit-permutations.ts",
     "demo:readmes": "tsx packages/galley/scripts/emit-readmes.ts",
-    "test:visual": "pnpm demo:permutations && pnpm demo:readmes && playwright test"
+    "demo:briefs": "tsx packages/galley/scripts/emit-briefs.ts",
+    "test:visual": "pnpm demo:permutations && pnpm demo:readmes && pnpm demo:briefs && playwright test"
   },
   "devDependencies": {
     "@playwright/test": "^1.61.1",

@@ -20,6 +20,7 @@ const here = dirname(fileURLToPath(import.meta.url));
 const distRoot = resolve(here, "../../packages/galley/dist");
 const permDir = resolve(distRoot, "permutations");
 const readmeDir = resolve(distRoot, "readmes");
+const briefDir = resolve(distRoot, "briefs");
 
 function htmlFiles(dir: string): string[] {
   try {
@@ -33,9 +34,13 @@ function htmlFiles(dir: string): string[] {
 
 const permFiles = htmlFiles(permDir);
 const readmeFiles = htmlFiles(readmeDir);
+// Bare-mount brief fixtures (`pnpm demo:briefs`): the galley cedes the page to
+// a fixed-width host pane, so they run every content gate but not page-object.
+const briefFiles = htmlFiles(briefDir);
 const contentFiles = [
-  ...permFiles.map((f) => ({ dir: permDir, file: f, label: `permutations/${f}` })),
-  ...readmeFiles.map((f) => ({ dir: readmeDir, file: f, label: `readmes/${f}` })),
+  ...permFiles.map((f) => ({ dir: permDir, file: f, label: `permutations/${f}`, bare: false })),
+  ...readmeFiles.map((f) => ({ dir: readmeDir, file: f, label: `readmes/${f}`, bare: false })),
+  ...briefFiles.map((f) => ({ dir: briefDir, file: f, label: `briefs/${f}`, bare: true })),
 ];
 
 function urlOf(dir: string, file: string): string {
@@ -230,7 +235,7 @@ for (const f of contentFiles) {
 // The regression that shipped once (full-bleed flush-left prose) must fail CI.
 // A page is present when its background differs from the ground AND content sits
 // inset from the viewport edge -- at every viewport, so a phone counts too.
-for (const f of contentFiles) {
+for (const f of contentFiles.filter((c) => !c.bare)) {
   for (const width of [360, 768, 1280, 2560]) {
     test(`page-object @${width}: ${f.label}`, async ({ page }) => {
       await page.setViewportSize({ width, height: 900 });
@@ -316,6 +321,140 @@ for (const f of contentFiles) {
       findings,
       `flow blocks collapsed (0 top margin):\n${JSON.stringify(findings, null, 2)}`,
     ).toEqual([]);
+  });
+}
+
+// ---- Gate 8: bare mount geometry (M1) ------------------------------------
+// `galley--bare` cedes all page geometry to the host: the fixture host fixes
+// the pane at 640 or 1040 and bounds the column with the emitted measure. The
+// contract: the galley paints no page chrome, the column fills the pane up to
+// the measure, prose wraps into a real column, and nothing clips horizontally.
+for (const f of contentFiles.filter((c) => c.bare)) {
+  test(`bare-mount: ${f.label}`, async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto(urlOf(f.dir, f.file), { waitUntil: "load" });
+
+    const r = await page.evaluate(() => {
+      const pane = document.querySelector(".host-pane");
+      const galley = document.querySelector(".galley");
+      if (!pane || !galley) return { ok: false as const, why: "no pane or galley" };
+      const paneWidth = Number(pane.getAttribute("data-pane-width"));
+      const paneBox = pane.getBoundingClientRect();
+      const paneStyle = getComputedStyle(pane);
+      const paneContent =
+        paneBox.width - parseFloat(paneStyle.paddingLeft) - parseFloat(paneStyle.paddingRight);
+      const galleyBox = galley.getBoundingClientRect();
+      const galleyStyle = getComputedStyle(galley);
+      const measurePx = (() => {
+        const probe = document.createElement("div");
+        probe.style.cssText = "position:absolute;visibility:hidden;inline-size:var(--gy-measure)";
+        galley.appendChild(probe);
+        const w = probe.getBoundingClientRect().width;
+        probe.remove();
+        return w;
+      })();
+      // Wrapping: a long paragraph must break into multiple line boxes.
+      const p = Array.from(galley.querySelectorAll("p")).find(
+        (el) => (el.textContent || "").trim().split(/\s+/).length > 30,
+      );
+      let lineCount = 0;
+      if (p) {
+        const range = document.createRange();
+        range.selectNodeContents(p);
+        lineCount = new Set(
+          Array.from(range.getClientRects())
+            .filter((box) => box.width > 0)
+            .map((box) => Math.round(box.top)),
+        ).size;
+      }
+      const clipped: string[] = [];
+      [pane, galley, ...Array.from(galley.querySelectorAll("*"))].forEach((el) => {
+        const style = getComputedStyle(el);
+        const scrollable = style.overflowX === "auto" || style.overflowX === "scroll";
+        if (!scrollable && el.scrollWidth > el.clientWidth + 1) {
+          clipped.push(el.tagName.toLowerCase());
+        }
+      });
+      return {
+        ok: true as const,
+        paneWidth,
+        paneBoxWidth: Math.round(paneBox.width),
+        paneContent: Math.round(paneContent),
+        galleyWidth: Math.round(galleyBox.width),
+        measurePx: Math.round(measurePx),
+        galleyBg: galleyStyle.backgroundColor,
+        galleyShadow: galleyStyle.boxShadow,
+        lineCount,
+        clipped,
+      };
+    });
+
+    expect(r.ok, r.ok ? "" : r.why).toBe(true);
+    if (!r.ok) return;
+    // The host fixed the pane; the render honored it.
+    expect(r.paneBoxWidth).toBeLessThanOrEqual(r.paneWidth + 1);
+    // The column is measured: it fills the pane content box up to the measure.
+    expect(r.galleyWidth).toBeLessThanOrEqual(r.paneContent + 1);
+    expect(r.galleyWidth, "column must equal min(measure, pane content)").toBeLessThanOrEqual(
+      Math.min(r.measurePx, r.paneContent) + 1,
+    );
+    expect(r.galleyWidth).toBeGreaterThanOrEqual(Math.min(r.measurePx, r.paneContent) - 1);
+    // No page chrome: the bare galley paints no surface and casts no shadow.
+    expect(r.galleyBg).toBe("rgba(0, 0, 0, 0)");
+    expect(r.galleyShadow).toBe("none");
+    // Correct wrapping, no horizontal clipping.
+    expect(r.lineCount, "a long paragraph must wrap into a column").toBeGreaterThan(1);
+    expect(r.clipped, "no element may clip horizontally").toEqual([]);
+  });
+}
+
+// ---- Gate 9: heading rhythm at pane scale (M3) ----------------------------
+// The owl-specificity regression shipped once (0.1.2): per-element `margin: 0`
+// resets out-specified `.galley > * + *`, every body block computed
+// margin-top: 0, and trimmed heading descenders painted through the first line
+// of the following list. This gate pins the fix where it was diagnosed: at
+// pane width, the computed margin-top of whatever follows an h2 is nonzero,
+// the rendered gap clears the descender band, and the air above stays inside
+// the sectional maximum (no orphaned heading spacing).
+for (const f of contentFiles.filter((c) => c.bare)) {
+  test(`heading-rhythm: ${f.label}`, async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto(urlOf(f.dir, f.file), { waitUntil: "load" });
+
+    const findings = await page.evaluate(() => {
+      const bad: Array<Record<string, string | number>> = [];
+      document.querySelectorAll(".galley :is(h2, h3, h4)").forEach((h) => {
+        const next = h.nextElementSibling;
+        if (!next || /^H[1-6]$/.test(next.tagName)) return;
+        const mt = parseFloat(getComputedStyle(next).marginTop) || 0;
+        const hStyle = getComputedStyle(h);
+        const fontSize = parseFloat(hStyle.fontSize);
+        const gapBelow = next.getBoundingClientRect().top - h.getBoundingClientRect().bottom;
+        const nextLh = parseFloat(getComputedStyle(next).lineHeight);
+        const hb = h.getBoundingClientRect();
+        const prev = h.previousElementSibling;
+        const gapAbove =
+          prev && !/^H[1-6]$/.test(prev.tagName)
+            ? hb.top - prev.getBoundingClientRect().bottom
+            : null;
+        const text = (h.textContent || "").trim().slice(0, 40);
+        if (mt <= 0) {
+          bad.push({ text, why: "computed margin-top of the follower is zero", mt });
+        }
+        // Descender clearance: text-box trims the heading to cap/alphabetic, so
+        // descenders hang below the box; the binding gap must clear them.
+        if (gapBelow < fontSize * 0.12) {
+          bad.push({ text, why: "heading sits flush on its follower", gapBelow });
+        }
+        // No orphaned heading: air above stays within the sectional maximum.
+        if (gapAbove !== null && gapAbove > nextLh * 3.25) {
+          bad.push({ text, why: "orphaned heading spacing above", gapAbove });
+        }
+      });
+      return bad;
+    });
+
+    expect(findings, `heading rhythm failures:\n${JSON.stringify(findings, null, 2)}`).toEqual([]);
   });
 }
 

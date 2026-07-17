@@ -37,18 +37,19 @@ opt-in serif (`SERIF_PROSE`).
 The keystone. `generateRegister(axes)` derives everything; nothing downstream holds a literal.
 Modules:
 
-| File           | Role                                                                                          |
-| -------------- | --------------------------------------------------------------------------------------------- |
-| `types.ts`     | `Axes` (7 inputs), `Register` (all outputs), `RegisterContrastError`.                         |
-| `color.ts`     | OKLCH <-> sRGB, WCAG contrast, APCA (advisory). Dependency-free.                              |
-| `scale.ts`     | Type ramp (`base * ratio^i`, quarter-pixel), leading solve (f of size & measure), rhythm.     |
-| `page.ts`      | Van de Graaf 2:3:4:6 page margins, screen-adapted (content optically high).                   |
-| `palette.ts`   | OKLCH ladders + the **AA contrast solver**. Ink ladder anchors ends, interpolates the middle. |
-| `detailing.ts` | OpenType features, text-wrap, hanging punctuation, hyphenation defaults.                      |
-| `shiki.ts`     | A Shiki theme derived from the same ladders (so code matches the register).                   |
-| `register.ts`  | `generateRegister` orchestration + the contrast gate (throws if unsolvable).                  |
-| `emit.ts`      | `Register -> --gy-*` CSS custom properties, incl. the page object (pads, elevation, tint).    |
-| `fixtures.ts`  | `parchment` (light), `substrate` (dark), `print`.                                             |
+| File             | Role                                                                                           |
+| ---------------- | ---------------------------------------------------------------------------------------------- |
+| `types.ts`       | `Axes` (7 inputs), `Register` (all outputs), `RegisterContrastError`.                          |
+| `color.ts`       | OKLCH <-> sRGB, WCAG contrast, APCA (advisory). Dependency-free.                               |
+| `scale.ts`       | Type ramp (`base * ratio^i`, quarter-pixel), leading solve (f of size & measure), rhythm.      |
+| `page.ts`        | Van de Graaf 2:3:4:6 page margins, screen-adapted (content optically high).                    |
+| `palette.ts`     | OKLCH ladders + the **AA contrast solver**. Ink ladder anchors ends, interpolates the middle.  |
+| `detailing.ts`   | OpenType features, text-wrap, hanging punctuation, hyphenation defaults.                       |
+| `shiki.ts`       | A Shiki theme derived from the same ladders (so code matches the register).                    |
+| `register.ts`    | `generateRegister` orchestration + the contrast gate (throws if unsolvable).                   |
+| `emit.ts`        | `Register -> --gy-*` CSS custom properties, incl. the page object (pads, elevation, tint).     |
+| `fixtures.ts`    | `parchment` (light), `substrate` (dark), `print`, `console-dark` (+ serif/sans face variants). |
+| `fixture-css.ts` | Pinned fixture artifacts: seed-stamped emit for `fixtures/css/*.css` (`pnpm emit:fixtures`).   |
 
 **Load-bearing invariants**
 
@@ -102,8 +103,18 @@ pnpm format          # prettier: printWidth 100, proseWrap always for markdown
   colored rails on callouts/boxes. Heading binding + the article paper kit (booktabs, print-context
   justify). Real fonts via `galley/fonts` (@fontsource) with system-stack fallback default.
 - **G7 gates: wired as blockers.** `pnpm test:visual` (Chromium) runs overflow, rendered AA, widows,
-  **page-object present**, and **heading-binding** as OS-independent CI blockers; pixel snapshots
-  (register x recipe + MIT-News fixture) are a local per-OS check.
+  **page-object present**, **heading-binding**, **block-spacing**, **bare-mount geometry**, and
+  **heading-rhythm** as OS-independent CI blockers; pixel snapshots (register x recipe + MIT-News
+  fixture) are a local per-OS check.
+- **Console fixture pack (SPEC-MDT-CONSOLE-FIXTURE M1-M4): shipped.** The bare mount is an official,
+  gate-tested contract (README "The two mounts"; 640/1040 fixture hosts over the technical brief in
+  `fixtures/briefs/`). `console-dark` is a first-class dark register (AA-solved, cool ground, 72ch
+  pane measure) with two face variants (serif publication body / sans body + serif display) pinned
+  as CSS artifacts in `fixtures/css/` and shipped as the `./fixtures/*.css` subpath; bridge points
+  are `--gy-surface`, `--gy-ground`, `--gy-font-mono`. Heading rhythm is ratio-derived per register
+  (`rhythm.heading`, `--gy-space-above-h*` / `--gy-space-below-heading` / `--gy-space-figure` /
+  `--gy-space-flow`), which also releases the owl-specificity fix that 0.1.2 shipped broken
+  (per-element `margin: 0` resets out-specified the owl; every body block computed margin-top: 0).
 - **230 unit tests green** + G7 visual suite green (439), typecheck + lint + `pnpm build` clean.
 - All three headline claims stand: computed beauty (G1), types+recipes (G3),
   collections-as-publication (G4).
