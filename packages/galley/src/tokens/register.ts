@@ -150,7 +150,7 @@ export function generateRegister(
     bodyLeading,
     palette,
     page: buildPage(axes),
-    rhythm: buildRhythm(axes.base, bodyLeading),
+    rhythm: buildRhythm(axes.base, bodyLeading, axes.ratio),
     detailing: buildDetailing(axes),
     fonts: { ...DEFAULT_FONTS, ...opts.fonts },
     contrast: report,

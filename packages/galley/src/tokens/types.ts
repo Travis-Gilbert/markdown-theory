@@ -99,6 +99,21 @@ export interface PageShape {
   marginOuter: number;
 }
 
+/** Ratio-derived heading rhythm for the pane-width reading case (60-90ch hosts). */
+export interface HeadingRhythm {
+  /**
+   * Space a heading owns above itself, in lh, keyed by level. Derived from the
+   * type ratio: the flow gap compounded one ratio step past the heading's own
+   * ramp step, capped at the sectional maximum, so a wider ramp earns
+   * proportionally more sectional air.
+   */
+  aboveLh: { h2: number; h3: number; h4: number };
+  /** The binding gap below any heading, in lh (the rhythm unit: it stays attached). */
+  belowLh: number;
+  /** Figure block air: one ratio step past the flow gap, in lh. */
+  figureLh: number;
+}
+
 /** Rhythm: the vertical spacing scale, all in `lh` units. */
 export interface Rhythm {
   /** The base spacing unit in lh (0.5lh per the spec). */
@@ -107,6 +122,8 @@ export interface Rhythm {
   scaleLh: number[];
   /** Precomputed pixel rhythm (base * bodyLeading), for calc fallback where `lh` fails. */
   rhythmPx: number;
+  /** Ratio-derived heading and figure spacing (M3, pane-width reading). */
+  heading: HeadingRhythm;
 }
 
 /** Detailing defaults baked into the emitted properties (G1). */

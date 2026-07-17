@@ -59,6 +59,19 @@ export function emitRegisterVars(reg: Register): Record<string, string> {
   });
   v["--gy-rhythm-px"] = `${reg.rhythm.rhythmPx}px`;
 
+  // Heading rhythm (M3): fixture-level, ratio-derived. The flow gap is the owl
+  // step (space-3); a heading owns ratio-compounded air above, binds below with
+  // the rhythm unit, and a figure takes one ratio step past the flow gap.
+  // galley/css consumes these (with the legacy scale steps as fallbacks), so
+  // pane-scale heading spacing is a register decision, never a consumer override.
+  const hr = reg.rhythm.heading;
+  v["--gy-space-flow"] = "var(--gy-space-3)";
+  v["--gy-space-above-h2"] = `${hr.aboveLh.h2}lh`;
+  v["--gy-space-above-h3"] = `${hr.aboveLh.h3}lh`;
+  v["--gy-space-above-h4"] = `${hr.aboveLh.h4}lh`;
+  v["--gy-space-below-heading"] = `${hr.belowLh}lh`;
+  v["--gy-space-figure"] = `${hr.figureLh}lh`;
+
   // Page shape (fractions; the raw canon, kept for callers that want it).
   v["--gy-page-margin-top"] = `${reg.page.marginTop}`;
   v["--gy-page-margin-bottom"] = `${reg.page.marginBottom}`;
