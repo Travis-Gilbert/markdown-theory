@@ -10,6 +10,7 @@ export type {
   ContrastReport,
   Density,
   Detailing,
+  HeadingRhythm,
   Mode,
   PageShape,
   Palette,
@@ -29,7 +30,16 @@ export {
 
 export { emitCss, emitRegisterVars } from "./emit.js";
 
-export { buildRamp, buildRhythm, HEADING_LEADING, quarterPixel, solveLeading } from "./scale.js";
+export { FIXTURE_CSS_ARTIFACTS, fixtureCss } from "./fixture-css.js";
+
+export {
+  buildRamp,
+  buildRhythm,
+  HEADING_LEADING,
+  headingRhythm,
+  quarterPixel,
+  solveLeading,
+} from "./scale.js";
 
 export { buildPage } from "./page.js";
 
@@ -59,7 +69,14 @@ export {
 } from "./color.js";
 
 export {
+  CONSOLE_DARK_AXES,
+  CONSOLE_DARK_VARIANTS,
+  consoleDark,
+  consoleDarkSans,
+  consoleDarkSerif,
   FIXTURE_AXES,
+  FIXTURE_REGISTERS,
+  type FixtureVariant,
   parchment,
   PARCHMENT_AXES,
   print,

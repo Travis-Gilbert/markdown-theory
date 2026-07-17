@@ -19,6 +19,7 @@
       },
       "./css": "./dist/galley.css",
       "./fonts": "./dist/fonts.css",
+      "./fixtures/*.css": "./dist/fixtures/*.css",
       "./react": {
         "types": "./dist/react/index.d.ts",
         "default": "./dist/react/index.js"
@@ -48,6 +49,7 @@
     },
     "./css": "./src/css/galley.css",
     "./fonts": "./src/css/fonts.css",
+    "./fixtures/*.css": "./fixtures/css/*.css",
     "./react": {
       "types": "./src/react/index.ts",
       "default": "./src/react/index.ts"
@@ -73,11 +75,12 @@
     "dist/mdx",
     "dist/galley.css",
     "dist/fonts.css",
+    "dist/fixtures",
     "dist/types-*.d.ts"
   ],
   "scripts": {
     "test": "vitest run",
-    "build": "rm -rf dist/tokens dist/react dist/templates dist/shelf dist/mdx dist/galley.css dist/fonts.css dist/types-*.d.ts && tsup",
+    "build": "rm -rf dist/tokens dist/react dist/templates dist/shelf dist/mdx dist/galley.css dist/fonts.css dist/fixtures dist/types-*.d.ts && tsup",
     "prepack": "pnpm run build"
   },
   "peerDependencies": {

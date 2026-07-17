@@ -7,3 +7,7 @@ blob-report/
 pnpm-lock.yaml
 **/*.png
 **/gates.spec.ts-snapshots/
+# Pinned generated register artifacts: byte-exact, owned by the drift gate.
+packages/galley/fixtures/css/
+# Brief corpus: a render input; proseWrap must not rewrap directive lines.
+packages/galley/fixtures/briefs/

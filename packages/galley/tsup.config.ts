@@ -1,4 +1,4 @@
-import { copyFileSync } from "node:fs";
+import { copyFileSync, mkdirSync, readdirSync } from "node:fs";
 import { defineConfig } from "tsup";
 
 // Build every subpath export to dist (.js + .d.ts). The key line is
@@ -29,5 +29,11 @@ export default defineConfig({
   async onSuccess() {
     copyFileSync("src/css/galley.css", "dist/galley.css");
     copyFileSync("src/css/fonts.css", "dist/fonts.css");
+    // Pinned fixture artifacts (M2/M4): committed under fixtures/css (the
+    // drift gate keeps them honest), shipped verbatim as dist/fixtures/*.css.
+    mkdirSync("dist/fixtures", { recursive: true });
+    for (const f of readdirSync("fixtures/css").filter((n) => n.endsWith(".css"))) {
+      copyFileSync(`fixtures/css/${f}`, `dist/fixtures/${f}`);
+    }
   },
 });
