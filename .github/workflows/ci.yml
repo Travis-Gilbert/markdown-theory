@@ -47,7 +47,7 @@ jobs:
       # platforms. Reverting P1 (the page object) fails the page-object gate.
       # Pixel snapshots stay a local check (baselines are committed per-OS);
       # changing one requires a token/punch-item reference in the commit message.
-      - run: pnpm demo:permutations && pnpm demo:readmes
+      - run: pnpm demo:permutations && pnpm demo:readmes && pnpm demo:briefs
       - run: pnpm exec playwright test --grep-invert snapshot
       - if: failure()
         uses: actions/upload-artifact@v4
